@@ -22,7 +22,7 @@ name##_list* name##_listCreate(int newSize)                                     
     name##_list* list;                                                              \
     list = malloc(sizeof(name##_list));                                             \
     list->data = malloc(sizeof(type) * (newSize + 4));                              \
-    list->size = newSize;                                                           \
+    list->size = 0;                                                           \
     list->capacity = (newSize + 4);                                                 \
     return list;                        \
 }                                       \
@@ -34,7 +34,8 @@ void name##_addToList(name##_list *l, type value)\
     {                                   \
         type* temp = realloc(l->data, sizeof(type) * (l->capacity + 2));\
         l->capacity += 2;               \
-        if(!temp) exit(1);              \
+        l->size += 2;                   \
+        if(!temp) exit(-1);             \
         l->data = temp;                 \
     }                                   \
     l->data[l->size++] = value;         \
@@ -115,3 +116,6 @@ void name##_sortList(name##_list *l, int (*cmp)(const type *, const type *))    
         }                               \
     }                                   \
 }                                        
+// There are denitiely better sorting algorithms,
+// but I haven't gotten there in my university
+// studies yet, so for now it's this
