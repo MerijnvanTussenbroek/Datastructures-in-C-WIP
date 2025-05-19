@@ -116,6 +116,6 @@ void name##_sortList(name##_list *l, int (*cmp)(const type *, const type *))    
         }                               \
     }                                   \
 }                                        
-// There are denitiely better sorting algorithms,
+// There are defitiely better sorting algorithms,
 // but I haven't gotten there in my university
 // studies yet, so for now it's this

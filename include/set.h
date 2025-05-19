@@ -19,6 +19,7 @@ name##_set* name##_setCreate(int newSize)   \
     return set;                             \
 }                                           \
                                             \
+/* The cmp function must return 2 if they're equal*/\
 void name##_addToSet(name##_set *s, type value, int (*cmp)(const type *, const type *))\
 {                                           \
     if(s->size == s->capacity)              \
@@ -39,7 +40,6 @@ void name##_addToSet(name##_set *s, type value, int (*cmp)(const type *, const t
     s->data[s->size++] = value;             \
 }                                           \
                                             \
-/* The cmp function must return 2 if they're equal*/\
 void name##_removeFromSet(name##_set *s, type value, int (*cmp)(const type *, const type *))\
 {                                           \
     for(int i = 0; i < s->size; i++)        \

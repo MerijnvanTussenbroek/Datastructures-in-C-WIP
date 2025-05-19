@@ -1,36 +1,58 @@
-#include "list.h"
-#include "set.h"
+//#include "list.h"
+//#include "set.h"
+#include "linked_list.h"
 
-DEFINE_SET(char, char);
-
-int cmp(const char* a, const char* b);
-
-int main()
-{
-    char_set* set = char_setCreate(4);
-    char_addToSet(set, 'a', cmp);
-    //char_addToSet(set, 'b', cmp);
-    //char_addToSet(set, 'c', cmp);
-    //char_addToSet(set, 'd', cmp);
-    printf("adding second a %d\n", set->size);
-    char_addToSet(set, 'a', cmp);
-    char_addToSet(set, 'b', cmp);
-    printf("adding second a %d\n", set->size);
+DEFINE_LINKED_LIST(int, int);
 
 
-    char_deleteSet(set);
+int main(){
 
-    printf("Program finished with no problems");
-    return 0;
-}
+    int x = 5;
+    int y = 7;
+    int z = 0;
 
-int cmp(const char* a, const char* b)
-{
-    printf("%c, %c \n", *a, *b);
-    if(*a == *b)
-    {
-        return 2;
-    }
+    int a = 6;
+    int b = 3;
+    int c = 10;
 
+    int_node* head = int_initializateLinkedList(&x);
+    printf("Initialized list\n");
+    int_addNewNode(head, &y);
+    int_addNewNode(head, &z);
+    int_addNewNode(head, &a);
+    int_addNewNode(head, &b);
+    int_addNewNode(head, &c);
+
+    printf("added data\n");
+    
+    int_LLresult result = int_retrieveData(head, 4);
+    printf("%d \n", result.value);
+
+    result = int_retrieveData(head, 3);
+    printf("%d \n", result.value);
+
+    a = 69;
+    printf("%d \n", result.value);  
+
+    a = 70;
+    int_changeValue(head, 3, &a);
+
+    result = int_retrieveData(head, 3);
+    printf("%d \n", result.value);
+    
+    int_removeItem(head, 3);
+
+    result = int_retrieveData(head, 3);
+    printf("%d \n", result.value);
+
+    result = int_retrieveData(head, 0);
+    printf("%d \n", result.value);
+
+    int_removeItem(head, 0);
+
+    result = int_retrieveData(head, 0);
+    printf("%d \n", result.value);
+
+    printf("\nProgram finished with no problems");
     return 0;
 }
