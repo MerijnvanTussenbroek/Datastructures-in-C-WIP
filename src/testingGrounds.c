@@ -1,9 +1,12 @@
 //#include "list.h"
 //#include "set.h"
 #include "linked_list.h"
+#include "stack.h"
 
-DEFINE_LINKED_LIST(int, int);
+//DEFINE_LINKED_LIST(int, int);
+DEFINE_STACK(int, int);
 
+void testStack();
 
 int main(){
 
@@ -53,6 +56,17 @@ int main(){
     result = int_retrieveData(head, 0);
     printf("%d \n", result.value);
 
+    printf("\n\n\n");
+    testStack();
+
     printf("\nProgram finished with no problems");
     return 0;
+}
+
+void testStack()
+{
+    int x = 5;
+    int_stack* stack = int_initializeStack(&x);
+
+    
 }

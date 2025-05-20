@@ -86,6 +86,7 @@ void name##_removeItem(name##_node* list, int index)\
         name##_node* nodeToBeConnected = nodeToBeRemoved->next;\
         list->next = nodeToBeConnected; \
         nodeToBeRemoved->next = NULL;   \
+        free(nodeToBeRemoved);          \
     }                                   \
     else                                \
     {                                   \
