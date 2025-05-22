@@ -46,4 +46,10 @@ name##_stack_ss name##_pop(name##_stack* stack)        \
     result.value = node->data;              \
     free(node);                             \
     return result;                           \
-}
+}\
+                                            \
+void name##_destroyStack(name##_stack* stack)\
+{                                           \
+    name##_destroyLinkedList(stack->next);  \
+    free(stack);                            \
+}   
