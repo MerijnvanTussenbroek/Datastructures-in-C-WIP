@@ -12,12 +12,13 @@ typedef struct name##_node              \
 typedef struct                          \
 {                                       \
     int success;                        \
-    type value;                        \
+    type* value;                        \
 } name##_LLresult;                      \
                                         \
                                         \
 name##_node* name##_initializateLinkedList(type* newData);\
 void name##_addNewNode(name##_node* list, type* newData);\
+void name##_insertNewNode(name##_node* list, type* newData, int index);\
 name##_LLresult name##_retrieveData(name##_node* list, int index);\
 int name##_getSize(name##_node* list);\
 void name##_removeItem(name##_node* list, int index);\

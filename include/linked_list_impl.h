@@ -21,6 +21,26 @@ void name##_addNewNode(name##_node* list, type* newData)\
     }                                   \
 }                                       \
                                         \
+void name##_insertNewNode(name##_node* list, type* newData, int index)\
+{                                       \
+    if(list->next == NULL && index > 1) \
+        return;                         \
+                                        \
+    if(index > 1)                       \
+    {                                   \
+        name##_insertNewNode(list->next, newData, index-1);\
+    }                                   \
+    else                                \
+    {                                   \
+        name##_node* newNode = (name##_node *)malloc(sizeof(name##_node));\
+        name##_node* current = list;    \
+        name##_node* next = list->next; \
+        newNode->data = *newData;       \
+        list->next = newNode;           \
+        newNode->next = next;           \
+    }                                   \
+}                                       \
+                                        \
 name##_LLresult name##_retrieveData(name##_node* list, int index)\
 {                                       \
     name##_LLresult result = { 0 };     \
@@ -36,7 +56,7 @@ name##_LLresult name##_retrieveData(name##_node* list, int index)\
     else                                \
     {                                   \
         result.success = 1;             \
-        result.value = list->data;      \
+        result.value = &list->data;     \
     }                                   \
     return result;                      \
 }                                       \
@@ -45,7 +65,7 @@ int name##_getSize(name##_node* list)   \
 {                                       \
     if(list->next == NULL)              \
     {                                   \
-        return 0;                       \
+        return 1;                       \
     }                                   \
     else                                \
     {                                   \
