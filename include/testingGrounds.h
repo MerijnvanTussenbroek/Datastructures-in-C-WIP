@@ -1,6 +1,5 @@
 #pragma once
 
+#include "graph.h"
 
-#include "double_linked_list.h"
-
-DEFINE_DOUBLE_LINKED_LIST(int, int);
+DEFINE_GRAPH(intGraph, int);

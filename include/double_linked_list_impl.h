@@ -7,6 +7,7 @@ name##_Dnode* name##_DinitializeDLL(type* data)     \
     list->data = *data;                             \
     list->next = NULL;                              \
     list->previous = NULL;                          \
+    list->size = 1;                                 \
     return list;                                    \
 }                                                   \
                                                     \
@@ -26,6 +27,19 @@ void name##_DaddNewNode(name##_Dnode* list, type* newData)\
                                                     \
 void name##_DinsertNewNode(name##_Dnode* list, type* newData, int index)\
 {                                                   \
+    if(index > 0 && list->next == NULL)             \
+        return;                                     \
+                                                    \
+    if(index == 0)                                  \
+    {                                               \
+        name##_Dnode* specialCase = name##_DinitializeDLL(newData);\
+        name##_Dnode* newNextNode = list;           \
+        specialCase->next = list;                   \
+        list->previous = specialCase;               \
+        *list = *specialCase;                       \
+        return;                                     \
+    }                                               \
+                                                    \
     if(index > 1)                                   \
     {                                               \
         name##_DinsertNewNode(list->next, newData, index-1);\

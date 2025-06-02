@@ -6,8 +6,9 @@ typedef struct name##_Dnode name##_Dnode;           \
 typedef struct name##_Dnode                         \
 {                                                   \
     type data;                                      \
-    name##_Dnode* next;                              \
-    name##_Dnode* previous;                          \
+    name##_Dnode* next;                             \
+    name##_Dnode* previous;                         \
+    int size;                                       \
 };                                                  \
                                                     \
 typedef struct                                      \

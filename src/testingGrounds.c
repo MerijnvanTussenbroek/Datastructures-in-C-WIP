@@ -1,12 +1,10 @@
 //#include "list.h"
 //#include "set.h"
 #include "testingGrounds.h"
-#include "double_linked_list_impl.h"
 
-DEFINE_DOUBLE_LINKED_LIST(int, int);
-//DEFINE_STACK(int, int);
+#include "graph_impl.h"
 
-void testStack();
+DEFINE_GRAPH(intGraph, int);
 
 int main(){
 

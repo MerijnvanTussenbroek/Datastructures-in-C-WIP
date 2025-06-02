@@ -17,6 +17,7 @@
         "compare": "c",
         "variant": "c",
         "vector": "cpp",
-        "string": "c"
+        "string": "c",
+        "stdlib.h": "c"
     }
 }
