@@ -18,6 +18,7 @@
         "variant": "c",
         "vector": "cpp",
         "string": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "cstdlib": "cpp"
     }
 }

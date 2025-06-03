@@ -2,9 +2,9 @@
 //#include "set.h"
 #include "testingGrounds.h"
 
-#include "graph_impl.h"
+#include "linked_list_impl.h"
 
-DEFINE_GRAPH(intGraph, int);
+DEFINE_LINKED_LIST(intList, int);
 
 int main(){
 

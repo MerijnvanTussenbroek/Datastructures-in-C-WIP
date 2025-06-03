@@ -1,5 +1,5 @@
 #pragma once
 
-#include "graph.h"
+#include "linked_list.h"
 
-DEFINE_GRAPH(intGraph, int);
+DEFINE_LINKED_LIST(intList, int);

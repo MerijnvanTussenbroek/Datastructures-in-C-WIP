@@ -2,19 +2,19 @@
 
 #define DEFINE_GRAPH(name, type)            \
                                             \
-name##_node* name##_initializeGraph(char* name)\
+name##_node* name##_initializeGraph(char* newName)\
 {                                           \
     name##_node* node = malloc(sizeof(name##_node));\
-    *node->name = *name;                    \
+    *node->nodeName = *newName;               \
     node->nodes = malloc(sizeof(name##_node));\
     node->length = 1;                       \
     return node;                            \
 }                                           \
                                             \
-void name##_addNewNode(name##_node* node, char* name)\
+void name##_addNewNode(name##_node* node, char* newName)\
 {                                           \
     node->nodes = realloc(node->nodes, (node->length + 1) * sizeof(name##_node *));\
-    name##_node* newNode = name##_initializeGraph(name);\
+    name##_node* newNode = name##_initializeGraph(newName);\
     newNode->length = 0;                    \
     newNode->nodes = NULL;                  \
     *node->nodes[node->length] = *newNode;  \
@@ -36,9 +36,9 @@ void name##_removeNode(name##_node* node, int index)\
                                             \
 void name##_addExistingNode(name##_node* origin, name##_node* nodeToBeAdded)\
 {                                           \
-    node->nodes = realloc(node->nodes, (node->length + 1) * sizeof(name##_node *));\
-    *node->nodes[node->length] = *nodeToBeAdded;\
-    node->length++;                         \
+    origin->nodes = realloc(origin->nodes, (origin->length + 1) * sizeof(name##_node *));\
+    *origin->nodes[origin->length] = *nodeToBeAdded;\
+    origin->length++;                         \
 }                                           \
                                             \
 void name##_destroyGraph(name##_node* node) \

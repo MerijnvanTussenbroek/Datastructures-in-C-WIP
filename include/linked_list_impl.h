@@ -1,128 +1,123 @@
-#pragma once
+#pragma onced
+
+#include "graph_impl.h"
 
 #define DEFINE_LINKED_LIST(name, type)  \
-name##_node* name##_initializateLinkedList(type* newData)\
+DEFINE_GRAPH(name, type);               \
+                                        \
+name##_node* name##_initializeLinkedList(type newData)\
 {                                       \
-    name##_node* list = malloc(sizeof(name##_node)); \
-    list->data = *newData;               \
-    list->next = NULL;                  \
+    name##_node* list = malloc(sizeof(name##_node));\
+    list->nodes = malloc(sizeof(name##_node *) * 1);\
+    list->nodes[0] = NULL;              \
+    list->data = newData;               \
+    list->length = 1;                   \
     return list;                        \
 }                                       \
                                         \
-void name##_addNewNode(name##_node* list, type* newData)\
+void name##_addNewNodeToLL(name##_node* list, type newData)\
 {                                       \
-    if(list->next == NULL)              \
+    name##_node* current = list;        \
+    while(current->nodes[0] != NULL)    \
     {                                   \
-        list->next = name##_initializateLinkedList(newData);\
+        current = current->nodes[0];    \
     }                                   \
-    else                                \
-    {                                   \
-        name##_addNewNode(list->next, newData);\
-    }                                   \
+    name##_node* newNode = name##_initializeLinkedList(newData);\
+    current->nodes[0] = newNode;        \
 }                                       \
                                         \
-void name##_insertNewNode(name##_node* list, type* newData, int index)\
+void name##_insertNewNodeToLL(name##_node** list, type newData, int index)\
 {                                       \
-    if(list->next == NULL && index > 1) \
-        return;                         \
-                                        \
-    if(index > 1)                       \
-    {                                   \
-        name##_insertNewNode(list->next, newData, index-1);\
-    }                                   \
-    else                                \
-    {                                   \
-        name##_node* newNode = (name##_node *)malloc(sizeof(name##_node));\
-        name##_node* current = list;    \
-        name##_node* next = list->next; \
-        newNode->data = *newData;       \
-        list->next = newNode;           \
-        newNode->next = next;           \
-    }                                   \
-}                                       \
-                                        \
-name##_LLresult name##_retrieveData(name##_node* list, int index)\
-{                                       \
-    name##_LLresult result = { 0 };     \
-    if(list->next == NULL && index > 0) \
-    {                                   \
-        return result;                  \
-    }                                   \
-                                        \
-    if(index > 0)                       \
-    {                                   \
-        result = name##_retrieveData(list->next, index-1);\
-    }                                   \
-    else                                \
-    {                                   \
-        result.success = 1;             \
-        result.value = &list->data;     \
-    }                                   \
-    return result;                      \
-}                                       \
-                                        \
-int name##_getSize(name##_node* list)   \
-{                                       \
-    if(list->next == NULL)              \
-    {                                   \
-        return 1;                       \
-    }                                   \
-    else                                \
-    {                                   \
-        return 1 + name##_getSize(list->next);\
-    }                                   \
-}                                       \
-                                        \
-void name##_removeItem(name##_node* list, int index)\
-{                                       \
-    if(index < 0)                       \
-        return;                         \
+    name##_node* current = *list;        \
                                         \
     if(index == 0)                      \
     {                                   \
-        name##_node* nodeToBeConnected = list->next;\
-        list->next = NULL;              \
-        *list = *nodeToBeConnected;       \
+        name##_node* newNode = name##_initializeLinkedList(newData);\
+        newNode->nodes[0] = *list;       \
+        *list = newNode;               \
+        return;                         \
     }                                   \
                                         \
-    if(index == 1)                      \
+    while(index > 1)                    \
     {                                   \
-        name##_node* nodeToBeRemoved = list->next;\
-        name##_node* nodeToBeConnected = nodeToBeRemoved->next;\
-        list->next = nodeToBeConnected; \
-        nodeToBeRemoved->next = NULL;   \
-        free(nodeToBeRemoved);          \
+        if(current->nodes[0] == NULL)   \
+            return;                     \
+                                        \
+        current = current->nodes[0];    \
+        index--;                        \
     }                                   \
-    else                                \
-    {                                   \
-        name##_removeItem(list->next, index-1);\
-    }                                   \
+                                        \
+    name##_node* nodeToBeAdded = name##_initializeLinkedList(newData);\
+    name##_node* inbetween = current->nodes[0];\
+    current->nodes[0] = nodeToBeAdded;  \
+    nodeToBeAdded->nodes[0] = inbetween;\
 }                                       \
                                         \
-void name##_changeValue(name##_node* list, int index, type* newData)\
+name##_GraphResult name##_retrieveDataFromLL(name##_node* list, int index)\
 {                                       \
-    if(index < 0)                       \
-        return;                         \
+    name##_GraphResult result = { 0 };  \
+    name##_node* current = list;        \
+    while(index > 0)                    \
+    {                                   \
+        if(current->nodes[0] == NULL)   \
+            return result;              \
                                         \
-    if(index > 0)                       \
-    {                                   \
-        name##_changeValue(list->next, index-1, newData);\
+        current = current->nodes[0];    \
+        index--;                        \
     }                                   \
-    else                                \
+                                        \
+    result.success = 1;                 \
+    result.value = current->data;       \
+    return result;                      \
+}                                       \
+                                        \
+int name##_getSizeFromLL(name##_node* list)   \
+{                                       \
+    int length = 1;                     \
+    name##_node* current = list;        \
+    while(current->nodes[0] != NULL)    \
     {                                   \
-        list->data = *newData;          \
+        current = current->nodes[0];    \
+        length++;                       \
     }                                   \
+    return length;                      \
+}                                       \
+                                        \
+void name##_removeItemFromLL(name##_node* list, int index)\
+{                                       \
+    name##_node* current = list;        \
+    while(index > 1)                    \
+    {                                   \
+        if(current->nodes[0] == NULL)   \
+            return;                     \
+                                        \
+        current = current->nodes[0];    \
+        index--;                        \
+    }                                   \
+                                        \
+    name##_node* nodeToBeRemoved = current->nodes[0];\
+    name##_node* nodeToBeConnected = nodeToBeRemoved->nodes[0];\
+    nodeToBeRemoved->nodes[0] = NULL;   \
+    name##_destroyGraph(nodeToBeRemoved);\
+    current->nodes[0] = nodeToBeConnected;\
+}                                       \
+                                        \
+void name##_changeValueInLL(name##_node* list, int index, type newData)\
+{                                       \
+    name##_node* current = list;        \
+    while(index > 0)                    \
+    {                                   \
+        if(current->nodes[0] == NULL)   \
+            return;                     \
+                                        \
+        current = current->nodes[0];    \
+        index--;                        \
+    }                                   \
+                                        \
+    current->data = newData;            \
 }                                       \
                                         \
 void name##_destroyLinkedList(name##_node* list)\
 {                                       \
-    if(list->next == NULL)              \
-    {                                   \
-        free(list);                     \
-    }                                   \
-    else                                \
-    {                                   \
-        name##_destroyLinkedList(list->next);\
-        free(list);                     \
-    }                                   \
-}
+    name##_destroyGraph(list);          \
+}                                       

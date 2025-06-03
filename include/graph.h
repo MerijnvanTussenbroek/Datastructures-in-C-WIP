@@ -5,7 +5,7 @@
 typedef struct name##_node name##_node; \
 typedef struct name##_node              \
 {                                       \
-    char* name;                         \
+    char* nodeName;                         \
     type data;                          \
     name##_node** nodes;                \
     int length;                         \
@@ -14,12 +14,12 @@ typedef struct name##_node              \
 typedef struct                          \
 {                                       \
     int success;                        \
-    type* value;                        \
+    type value;                         \
 } name##_GraphResult;                   \
                                         \
-name##_node* name##_initializeGraph(char* name);\
-void name##_addNewNode(name##_node* node, char* name);\
+name##_node* name##_initializeGraph(char* newName);\
+void name##_addNewNode(name##_node* node, char* newName);\
 void name##_removeNode(name##_node* node, int index);\
 void name##_addExistingNode(name##_node* origin, name##_node* nodeToBeAdded);\
-void name##_destroyGraph(name##_node* node);\
+void name##_destroyGraph(name##_node* node);
 
