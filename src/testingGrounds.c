@@ -2,9 +2,9 @@
 //#include "set.h"
 #include "testingGrounds.h"
 
-#include "double_linked_list_impl.h"
+#include "queue_impl.h"
 
-DEFINE_DOUBLE_LINKED_LIST(intDLL, int);
+DEFINE_QUEUE(intq, int);
 
 int main(){
 

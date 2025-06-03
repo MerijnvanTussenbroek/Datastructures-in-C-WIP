@@ -94,6 +94,11 @@ void name##_DremoveItem(name##_node** list, int index)\
     if(index == 0)                                  \
     {                                               \
         name##_node* nodeToBeConnected = (*list)->nodes[1];\
+        if(nodeToBeConnected == NULL)               \
+        {                                           \
+            printf("Tried removing a non-existing node");\
+            return;                                 \
+        }                                           \
         name##_node* nodeToBeRemoved = *list;       \
         *list = nodeToBeConnected;                  \
         nodeToBeRemoved->nodes[0] = NULL;           \

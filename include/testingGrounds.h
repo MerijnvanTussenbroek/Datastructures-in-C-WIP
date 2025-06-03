@@ -1,5 +1,5 @@
 #pragma once
 
-#include "double_linked_list.h"
+#include "queue.h"
 
-DEFINE_DOUBLE_LINKED_LIST(intDLL, int);
+DEFINE_QUEUE(intq, int);
