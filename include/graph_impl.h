@@ -47,7 +47,8 @@ void name##_destroyGraph(name##_node* node) \
     {                                       \
         for(int i = 0; i < node->length; i++)\
         {                                   \
-            name##_destroyGraph(node->nodes[i]);\
+            if(node->nodes[i] != NULL)      \
+                name##_destroyGraph(node->nodes[i]);\
         }                                   \
         free(node->nodes);                  \
     }                                       \

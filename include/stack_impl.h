@@ -5,14 +5,26 @@
 #define DEFINE_STACK(name, type)            \
 DEFINE_LINKED_LIST(name,type);              \
                                             \
-void push(name##_stack* stack, type newData)\
+name##_stack* name##_initializeStack(type newData)\
 {                                           \
-    name##_insertNewNodeToLL((name##_node **)&stack, newData, 0);\
+    name##_stack* stack = malloc(sizeof(name##_stack));\
+    stack->LL = name##_initializeLinkedList(newData);\
+    stack->length++;                        \
 }                                           \
                                             \
-name##_GraphResult pop(name##_stack* stack) \
+void name##_push(name##_stack* stack, type newData)\
 {                                           \
-    name##_GraphResult result = name##_retrieveDataFromLL((name##_node *)stack, 0);\
-    name##_removeItemFromLL((name##_node **)&stack, 0);\
-    return result;                          \
+    stack->length++;                        \
+    name##_insertNewNodeToLL(&stack->LL, newData, 0);\
+}                                           \
+                                            \
+name##_GraphResult name##_pop(name##_stack* stack)\
+{                                           \
+    if(stack->length > 0)                   \
+    {                                       \
+        stack->length--;                    \
+        name##_GraphResult result = name##_retrieveDataFromLL(stack->LL, 0);\
+        name##_removeItemFromLL(&stack->LL, 0);\
+        return result;                      \
+    }                                       \
 }

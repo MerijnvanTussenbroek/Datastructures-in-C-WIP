@@ -41,7 +41,10 @@ void name##_insertNewNodeToLL(name##_node** list, type newData, int index)\
     while(index > 1)                    \
     {                                   \
         if(current->nodes[0] == NULL)   \
+        {                               \
+            printf("trying to insert where it doesn't exist");\
             return;                     \
+        }                               \
                                         \
         current = current->nodes[0];    \
         index--;                        \
@@ -60,7 +63,10 @@ name##_GraphResult name##_retrieveDataFromLL(name##_node* list, int index)\
     while(index > 0)                    \
     {                                   \
         if(current->nodes[0] == NULL)   \
+        {                               \
+            printf("trying to retreive data that doesn't exist");\
             return result;              \
+        }                               \
                                         \
         current = current->nodes[0];    \
         index--;                        \
@@ -93,7 +99,10 @@ void name##_removeItemFromLL(name##_node** list, int index)\
     if(index == 0)                      \
     {                                   \
         if(current->nodes[0] == NULL)   \
+        {                               \
+            printf("\nremoveitemfromLL current nodes0 == NULL");\
             return;                     \
+        }                               \
                                         \
         name##_node* nodeToBeCon = current->nodes[0];\
         current->nodes[0] = NULL;       \
@@ -105,7 +114,10 @@ void name##_removeItemFromLL(name##_node** list, int index)\
     while(index > 1)                    \
     {                                   \
         if(current->nodes[0] == NULL)   \
-            return;                     \
+        {                               \
+            printf("trying to remove that doesn't exist");\
+            return;                     \   
+        }                               \
                                         \
         current = current->nodes[0];    \
         index--;                        \
@@ -124,7 +136,10 @@ void name##_changeValueInLL(name##_node* list, int index, type newData)\
     while(index > 0)                    \
     {                                   \
         if(current->nodes[0] == NULL)   \
-            return;                     \
+        {                               \
+            printf("trying to change thzat doesn't exist");\
+            return;                     \        
+        }                               \
                                         \
         current = current->nodes[0];    \
         index--;                        \

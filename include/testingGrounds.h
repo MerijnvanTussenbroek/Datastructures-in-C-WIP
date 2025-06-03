@@ -2,4 +2,4 @@
 
 #include "stack.h"
 
-DEFINE_STACK(intStack, int);
+DEFINE_STACK(stack, int);
