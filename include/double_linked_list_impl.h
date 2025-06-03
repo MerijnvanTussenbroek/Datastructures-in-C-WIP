@@ -1,137 +1,144 @@
 #pragma once
 
+#include "graph_impl.h"
+
 #define DEFINE_DOUBLE_LINKED_LIST(name, type)       \
-name##_Dnode* name##_DinitializeDLL(type* data)     \
+DEFINE_GRAPH(name, type);                           \
+name##_node* name##_initializeDLL(type newData)     \
 {                                                   \
-    name##_Dnode* list = malloc(sizeof(name##_Dnode));\
-    list->data = *data;                             \
-    list->next = NULL;                              \
-    list->previous = NULL;                          \
-    list->size = 1;                                 \
+    name##_node* list = malloc(sizeof(name##_node));\
+    list->nodes = malloc(sizeof(name##_node *) * 2);\
+    list->nodes[0] = NULL;                          \
+    list->nodes[1] = NULL;                          \
+    list->data = newData;                           \
+    list->length = 2;                               \
     return list;                                    \
 }                                                   \
                                                     \
-void name##_DaddNewNode(name##_Dnode* list, type* newData)\
+void name##_DaddNewNode(name##_node* list, type newData)\
 {                                                   \
-    if(list->next == NULL)                          \
+    name##_node* nodeToBeAdded = name##_initializeDLL(newData);\
+    name##_node* current = list;                    \
+    while(current->nodes[1] != NULL)                \
     {                                               \
-        name##_Dnode* newNode = name##_DinitializeDLL(newData);\
-        list->next = newNode;                       \
-        newNode->previous = list;                   \
+        current = current->nodes[1];                \
     }                                               \
-    else                                            \
-    {                                               \
-        name##_DaddNewNode(list->next, newData);      \
-    }                                               \
+    current->nodes[1] = nodeToBeAdded;              \
+    nodeToBeAdded->nodes[0] = current;              \
 }                                                   \
                                                     \
-void name##_DinsertNewNode(name##_Dnode* list, type* newData, int index)\
+void name##_DinsertNewNode(name##_node** list, type newData, int index)\
 {                                                   \
-    if(index > 0 && list->next == NULL)             \
-        return;                                     \
-                                                    \
     if(index == 0)                                  \
     {                                               \
-        name##_Dnode* specialCase = name##_DinitializeDLL(newData);\
-        name##_Dnode* newNextNode = list;           \
-        specialCase->next = list;                   \
-        list->previous = specialCase;               \
-        *list = *specialCase;                       \
+        name##_node* newNode = name##_initializeDLL(newData);\
+        newNode->nodes[1] = (*list);                \
+        (*list)->nodes[0] = newNode;                \
+        *list = newNode;                            \
         return;                                     \
     }                                               \
+    name##_node* current = *list;                   \
+    while(index > 1)                                \
+    {                                               \
+        if(current->nodes[1] == NULL)               \
+        {                                           \
+            printf("Tried inserting past end of list");\
+            return;                                 \
+        }                                           \
+        index--;                                    \
+        current = current->nodes[1];                \
+    }                                               \
+    name##_node* nodeToBeAdded = name##_initializeDLL(newData);\
+    name##_node* nodeToBeConnected = current->nodes[1];\
                                                     \
-    if(index > 1)                                   \
-    {                                               \
-        name##_DinsertNewNode(list->next, newData, index-1);\
-    }                                               \
-    else                                            \
-    {                                               \
-        name##_Dnode* current = list;               \
-        name##_Dnode* next = list->next;            \
-        name##_Dnode* newNode = name##_DinitializeDLL(newData);\
-        list->next = newNode;                       \
-        newNode->previous = list;                   \
-        next->previous = newNode;                   \
-        newNode->next = next;                       \
-    }                                               \
+    current->nodes[1] = nodeToBeAdded;              \
+    nodeToBeConnected->nodes[0] = nodeToBeAdded;    \
+    nodeToBeAdded->nodes[0] = current;              \
+    nodeToBeAdded->nodes[1] = nodeToBeConnected;    \
 }                                                   \
                                                     \
-name##_DLLresult name##_DretrieveData(name##_Dnode* list, int index)\
+name##_GraphResult name##_DretrieveData(name##_node* list, int index)\
 {                                                   \
-    name##_DLLresult result = { 0 };                \
-    if(list->next == NULL && index > 0)             \
+    name##_GraphResult result = { 0 };              \
+    name##_node* current = list;                    \
+    while(index > 0)                                \
     {                                               \
-        return result;                              \
+        if(current->nodes[1] == NULL)               \
+        {                                           \
+            printf("Tried retrieving from node that doesn't exist");\
+            return result;                          \
+        }                                           \
+        index--;                                    \
+        current = current->nodes[1];                \
     }                                               \
                                                     \
-    if(index > 0)                                   \
-    {                                               \
-        result = name##_DretrieveData(list->next, index-1);\
-    }                                               \
-    else                                            \
-    {                                               \
-        result.success = 1;                         \
-        result.value = &list->data;                 \
-    }                                               \
+    result.success = 1;                             \
+    result.value = current->data;                   \
     return result;                                  \
 }                                                   \
                                                     \
-int name##_DgetSize(name##_Dnode* list)             \
+int name##_DgetSize(name##_node * list)             \
 {                                                   \
-    if(list->next == NULL)                          \
+    int length = 1;                                 \
+    name##_node* current = list;                    \
+    while(current->nodes[1] != NULL)                \
     {                                               \
-        return 1;                                   \
+        length++;                                   \
+        current = current->nodes[1];                \
     }                                               \
-    else                                            \
-    {                                               \
-        return 1 + name##_DgetSize(list->next);     \
-    }                                               \
+    return length;                                  \
 }                                                   \
                                                     \
-void name##_DremoveItem(name##_Dnode* list, int index)\
+void name##_DremoveItem(name##_node** list, int index)\
 {                                                   \
-    if(index > 0 && list->next == NULL)             \
+    if(index == 0)                                  \
+    {                                               \
+        name##_node* nodeToBeConnected = (*list)->nodes[1];\
+        name##_node* nodeToBeRemoved = *list;       \
+        *list = nodeToBeConnected;                  \
+        nodeToBeRemoved->nodes[0] = NULL;           \
+        nodeToBeRemoved->nodes[1] = NULL;           \
+        name##_DdestroyLinkedList(nodeToBeRemoved);  \
         return;                                     \
+    }                                               \
                                                     \
-    if(index > 1)                                   \
+    name##_node* current = *list;                   \
+    while(index > 1)                                \
     {                                               \
-        name##_DremoveItem(list->next, index-1);    \
+        if(current->nodes[1] == NULL)               \
+        {                                           \
+            printf("Tried removing a non-existing node");\
+            return;                                 \
+        }                                           \
+        current = current->nodes[1];                \
+        index--;                                    \
     }                                               \
-    else                                            \
-    {                                               \
-        name##_Dnode* current = list;               \
-        name##_Dnode* nodeToBeRemoved = list->next; \
-        name##_Dnode* newNext = nodeToBeRemoved->next;\
-        current->next = newNext;                    \
-        newNext->previous = current;                \
-        free(nodeToBeRemoved);                      \
-    }                                               \
+    name##_node* nodeToBeRemoved = current->nodes[1];\
+    name##_node* nodeToBeConnected = nodeToBeRemoved->nodes[1];\
+    current->nodes[1] = nodeToBeConnected;          \
+    nodeToBeConnected->nodes[0] = current;          \
+    nodeToBeRemoved->nodes[0] = NULL;               \
+    nodeToBeRemoved->nodes[1] = NULL;               \
+    name##_DdestroyLinkedList(nodeToBeRemoved);      \
 }                                                   \
                                                     \
-void name##_DchangeValue(name##_Dnode* list, int index, type* newData)\
+void name##_DchangeValue(name##_node* list, int index, type newData)\
 {                                                   \
-    if(index > 0 && list->next == NULL)             \
-        return;                                     \
-                                                    \
-    if(index > 0)                                   \
+    name##_node* current = list;                    \
+    while(index > 0)                                \
     {                                               \
-        name##_DchangeValue(list->next, index-1, newData);\
+        if(current->nodes[1] == NULL)               \
+        {                                           \
+            printf("Tried changing value of non-existant node");\
+            return;                                 \
+        }                                           \
+        current = current->nodes[1];                \
+        index--;                                    \
     }                                               \
-    else                                            \
-    {                                               \
-        list->data = *newData;                      \
-    }                                               \
+    current->data = newData;                        \
 }                                                   \
                                                     \
-void name##_DdestroyLinkedList(name##_Dnode* list)  \
+void name##_DdestroyLinkedList(name##_node* list)   \
 {                                                   \
-    if(list->next == NULL)                          \
-    {                                               \
-        free(list);                                 \
-    }                                               \
-    else                                            \
-    {                                               \
-        name##_DdestroyLinkedList(list->next);      \
-        free(list);                                 \
-    }                                               \
+    name##_destroyGraph(list);                      \
 }
