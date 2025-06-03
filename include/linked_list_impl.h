@@ -28,13 +28,13 @@ void name##_addNewNodeToLL(name##_node* list, type newData)\
                                         \
 void name##_insertNewNodeToLL(name##_node** list, type newData, int index)\
 {                                       \
-    name##_node* current = *list;        \
+    name##_node* current = *list;       \
                                         \
     if(index == 0)                      \
     {                                   \
         name##_node* newNode = name##_initializeLinkedList(newData);\
-        newNode->nodes[0] = *list;       \
-        *list = newNode;               \
+        newNode->nodes[0] = *list;      \
+        *list = newNode;                \
         return;                         \
     }                                   \
                                         \
@@ -71,7 +71,7 @@ name##_GraphResult name##_retrieveDataFromLL(name##_node* list, int index)\
     return result;                      \
 }                                       \
                                         \
-int name##_getSizeFromLL(name##_node* list)   \
+int name##_getSizeFromLL(name##_node* list)\
 {                                       \
     int length = 1;                     \
     name##_node* current = list;        \
@@ -83,9 +83,25 @@ int name##_getSizeFromLL(name##_node* list)   \
     return length;                      \
 }                                       \
                                         \
-void name##_removeItemFromLL(name##_node* list, int index)\
+void name##_removeItemFromLL(name##_node** list, int index)\
 {                                       \
-    name##_node* current = list;        \
+    name##_node* current = *list;       \
+                                        \
+    if(index < 0)                       \
+        return;                         \
+                                        \
+    if(index == 0)                      \
+    {                                   \
+        if(current->nodes[0] == NULL)   \
+            return;                     \
+                                        \
+        name##_node* nodeToBeCon = current->nodes[0];\
+        current->nodes[0] = NULL;       \
+        name##_destroyLinkedList(current);\
+        *list = nodeToBeCon;            \
+        return;                         \
+    }                                   \
+                                        \
     while(index > 1)                    \
     {                                   \
         if(current->nodes[0] == NULL)   \

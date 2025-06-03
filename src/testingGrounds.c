@@ -2,9 +2,9 @@
 //#include "set.h"
 #include "testingGrounds.h"
 
-#include "linked_list_impl.h"
+#include "stack_impl.h"
 
-DEFINE_LINKED_LIST(intList, int);
+DEFINE_STACK(intStack, int);
 
 int main(){
 
