@@ -7,7 +7,7 @@ name##_list* name##_listCreate(int newSize)                                     
     name##_list* list;                                                              \
     list = malloc(sizeof(name##_list));                                             \
     list->data = malloc(sizeof(type) * (newSize + 4));                              \
-    list->size = 0;                                                           \
+    list->size = 0;                                                                 \
     list->capacity = (newSize + 4);                                                 \
     return list;                        \
 }                                       \
@@ -19,7 +19,6 @@ void name##_addToList(name##_list *l, type value)\
     {                                   \
         type* temp = realloc(l->data, sizeof(type) * (l->capacity + 2));\
         l->capacity += 2;               \
-        l->size += 2;                   \
         if(!temp) exit(-1);             \
         l->data = temp;                 \
     }                                   \
