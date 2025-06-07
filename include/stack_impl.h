@@ -9,7 +9,7 @@ name##_stack* name##_initializeStack(type newData)\
 {                                           \
     name##_stack* stack = malloc(sizeof(name##_stack));\
     stack->LL = name##_initializeLinkedList(newData);\
-    stack->length++;                        \
+    stack->length = 1;                      \
 }                                           \
                                             \
 void name##_push(name##_stack* stack, type newData)\
