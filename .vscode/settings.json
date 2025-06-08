@@ -19,6 +19,10 @@
         "vector": "cpp",
         "string": "c",
         "stdlib.h": "c",
-        "cstdlib": "cpp"
+        "cstdlib": "cpp",
+        "testinggrounds.h": "c",
+        "queue_impl.h": "c",
+        "dictionary.h": "c",
+        "stdio.h": "c"
     }
 }

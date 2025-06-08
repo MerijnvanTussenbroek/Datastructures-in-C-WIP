@@ -1,5 +1,9 @@
 #pragma once
 
-#include "queue.h"
+#include <stdio.h>
 
-DEFINE_QUEUE(intq, int);
+//#include "queue.h"
+#include "dictionary.h"
+
+DEFINE_DICTIONAIRY(char, char, test);
+//DEFINE_QUEUE(intq, int);

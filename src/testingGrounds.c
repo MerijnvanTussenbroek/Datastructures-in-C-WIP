@@ -1,13 +1,18 @@
 //#include "list.h"
 //#include "set.h"
+
+//#include "queue_impl.h"
 #include "testingGrounds.h"
+#include "dicionary_impl.h"
 
-#include "queue_impl.h"
 
-DEFINE_QUEUE(intq, int);
+DEFINE_DICTIONAIRY(char, char, test);
+
+//DEFINE_QUEUE(intq, int);
 
 int main(){
 
+    /*
     int x = 5;
     int y = 7;
     int z = 0;
@@ -15,7 +20,7 @@ int main(){
     int a = 6;
     int b = 3;
     int c = 10;
-
+    */
 
 
     printf("\nProgram finished with no problems");
