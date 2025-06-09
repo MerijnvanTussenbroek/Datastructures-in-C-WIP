@@ -1,14 +1,11 @@
 //#include "list.h"
 //#include "set.h"
 
-//#include "queue_impl.h"
 #include "testingGrounds.h"
-#include "dicionary_impl.h"
 
+#include "hashmap_impl.h"
 
-DEFINE_DICTIONAIRY(char, char, test);
-
-//DEFINE_QUEUE(intq, int);
+DEFINE_HASHMAP(test, char, char);
 
 int main(){
 
