@@ -23,6 +23,7 @@
         "testinggrounds.h": "c",
         "queue_impl.h": "c",
         "dictionary.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "graph.h": "c"
     }
 }

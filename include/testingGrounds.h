@@ -1,5 +1,5 @@
 #pragma once
 
-#include "hashmap.h"
+#include "binary_tree.h"
 
-DEFINE_HASHMAP(test, char, char);
+DEFINE_BINARY_TREE(intBT, int);

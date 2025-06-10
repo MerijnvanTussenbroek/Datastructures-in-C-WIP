@@ -3,23 +3,23 @@
 
 #include "testingGrounds.h"
 
-#include "hashmap_impl.h"
+#include "binary_tree_impl.h"
 
-DEFINE_HASHMAP(test, char, char);
+void printList(int* arr);
+
+DEFINE_BINARY_TREE(intBT, int);
 
 int main(){
-
-    /*
-    int x = 5;
-    int y = 7;
-    int z = 0;
-
-    int a = 6;
-    int b = 3;
-    int c = 10;
-    */
 
 
     printf("\nProgram finished with no problems");
     return 0;
+}
+
+void printList(int* arr)
+{
+    for(int i = 0; i < 16; i++)
+    {
+        printf("%d\n", arr[i]);
+    }
 }
