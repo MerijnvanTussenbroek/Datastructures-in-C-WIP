@@ -1,3 +1,5 @@
 #pragma once
 
-#include "vector.h"
+#include "hashset.h"
+
+DEFINE_HASHSET(test, char);

@@ -302,8 +302,6 @@ int triangleCollision(triangle* t, line* l, float epsilon)
             free(crossProduct2);
         }
         free(crossProduct1);
-
-        free(p);
         
         free(bMina);
         free(aMinc);
@@ -313,7 +311,7 @@ int triangleCollision(triangle* t, line* l, float epsilon)
         free(pMinb);
         free(pMinc);
     }
-    
+    free(s.v);
 
     return succes;
 }
@@ -396,6 +394,7 @@ collisionStruct triangleCollision2(triangle* t, line* l, float epsilon)
                     if(dotProduct3 >= 0)
                     {
                         s.success = 1;
+                        
                     }
                     free(crossProduct3);
                 }
@@ -411,8 +410,9 @@ collisionStruct triangleCollision2(triangle* t, line* l, float epsilon)
         free(pMinb);
         free(pMinc);
     }
-    
-    free(s.v);
+
+    if(s.success != 1)
+        free(s.v);
 
     return s;
 }

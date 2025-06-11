@@ -5,7 +5,7 @@
 typedef struct name##_node name##_node; \
 typedef struct name##_node              \
 {                                       \
-    char* nodeName;                         \
+    char* nodeName;                     \
     type data;                          \
     name##_node** nodes;                \
     int length;                         \
