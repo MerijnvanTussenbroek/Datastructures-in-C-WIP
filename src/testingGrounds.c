@@ -3,15 +3,11 @@
 
 #include "testingGrounds.h"
 
-#include "binary_tree_impl.h"
-
 void printList(int* arr);
-
-DEFINE_BINARY_TREE(intBT, int);
 
 int main(){
 
-
+    
     printf("\nProgram finished with no problems");
     return 0;
 }

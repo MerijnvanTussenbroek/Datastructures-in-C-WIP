@@ -6,7 +6,7 @@
 
 int* turnIntoBinary(int num)
 {
-    int* result = calloc(16, sizeof(int) * 16); // 2 bytes
+    int* result = (int *)calloc(16, sizeof(int) * 16); // 2 bytes
 
     unsigned int input = (unsigned int)num;
     int loc = 0;
@@ -223,7 +223,7 @@ void name##_removeFromBT(name##_node* node, int index, int location, name##_comp
                                         \
 void name##_reorganiseBT(name##_node* node, name##_compFunc cmp)\
 {                                       \
-    \
+    /*yet to be implemented*/\
 }                                       \
                                         \
 void name##_deleteBT(name##_node* node) \
