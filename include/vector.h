@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-enum LISTTYPE
+enum vectorType
 {
     LINE,
     CIRCLE,
@@ -37,7 +37,7 @@ typedef struct plane plane;
 typedef struct plane
 {
     vector* n;
-    point* p;
+    vector* p;
 };
 
 typedef struct circle circle;
@@ -65,22 +65,22 @@ typedef struct triangle
 {
     plane* p;
 
-    point* a;
-    point* b;
-    point* c;
+    vector* a;
+    vector* b;
+    vector* c;
 };
 
 typedef struct collisionStruct collisionStruct;
 typedef struct collisionStruct
 {
     int success;
-    point* p;
+    vector* v;
 };
 
-typedef struct listItem listItem;
-typedef struct listItem
+typedef struct figure figure;
+typedef struct figure
 {
-    enum LISTTYPE type;
+    enum vectorType type;
     union 
     {
         line* l;
@@ -88,8 +88,7 @@ typedef struct listItem
         circle* c;
         ellips* e;
         triangle* t;
-    };
-    
+    };  
 };
 
 vector* initializeVector(float x, float y, float z);
@@ -104,18 +103,20 @@ float dotProduct(vector* v1, vector* v2);
 vector* crossProduct(vector* v1, vector* v2);
 
 line* initializeLine(vector* start, vector* dir);
-plane* initializePlane(vector* n, point* p);
+plane* initializePlane(vector* n, vector* p);
 circle* initializeCircle(float x, float y, float z, float r);
 ellips* initializeEllips(circle* circle, float a, float b, float c);
-triangle* initializeTriangle(plane* p, point* a, point* b, point* c);
+triangle* initializeTriangle(plane* p, vector* a, vector* b, vector* c);
 
-//for these, we return 0 if there is no collision, 1 if there is
-int circleCollision(circle* c, line* l);
-int planeCollision(plane* p, line* l);
-int triangleCollision(triangle* t, line* l);
-int pointCollision(point* p, line* l);
+//for these, we return -1 if there is no collision, if there is, we return a value more than 1
+int circleCollision(circle* c, line* l, float epsilon);
+int planeCollision(plane* p, line* l, float epsilon);
+int triangleCollision(triangle* t, line* l, float epsilon);
+int ellipsCollision(ellips* e, line* l, float epsilon);
+int pointCollision(point* p, line* l, float epsilon);
 
-collisionStruct circleCollision2(circle* c, line* l);
-collisionStruct planeCollision2(plane* p, line* l);
-collisionStruct triangleCollision2(triangle* t, line* l);
-collisionStruct pointCollision2(point* p, line* l);
+collisionStruct circleCollision2(circle* c, line* l, float epsilon);
+collisionStruct planeCollision2(plane* p, line* l, float epsilon);
+collisionStruct triangleCollision2(triangle* t, line* l, float epsilon);
+collisionStruct ellipsCollision2(ellips* e, line* l, float epsilon);
+collisionStruct pointCollision2(point* p, line* l, float epsilon);
