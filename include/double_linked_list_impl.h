@@ -50,7 +50,7 @@ void name##_DinsertNewNode(name##_DLL* DLL, type newData, int index)\
     name##_node* current;                           \
     if(index == 0)/*New head*/                      \
     {                                               \
-        name##_DAddNewNode(DLL, newData);           \
+        name##_DaddNewNode(DLL, newData);           \
     }                                               \
     else if(index == DLL->length - 1)/*New tail*/   \
     {                                               \
@@ -101,7 +101,7 @@ name##_GraphResult name##_DretrieveData(name##_DLL* DLL, int index)\
         {                                           \
             if(current->nodes[1] == NULL)           \
             {                                       \
-                return;                             \
+                return result;                      \
             }                                       \
             else                                    \
             {                                       \

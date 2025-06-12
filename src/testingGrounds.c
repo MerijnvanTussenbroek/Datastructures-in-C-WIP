@@ -3,9 +3,9 @@
 
 #include "testingGrounds.h"
 
-#include "stack_impl.h"
+#include "double_linked_list_impl.h"
 
-DEFINE_STACK(test, int);
+DEFINE_DOUBLE_LINKED_LIST(test, char);
 
 
 void printList(int* arr);

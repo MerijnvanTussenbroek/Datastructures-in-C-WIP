@@ -20,7 +20,7 @@ typedef struct name##_DLL                           \
     int length;                                     \
 };                                                  \
                                                     \
-name##_node* name##_initializeDLL(type newData);     \
+name##_DLL* name##_initializeDLL(type newData);     \
 void name##_DaddNewNode(name##_DLL* DLL, type newData);\
 void name##_DinsertNewNode(name##_DLL* DLL, type newData, int index);\
 name##_GraphResult name##_DretrieveData(name##_DLL* DLL, int index);\

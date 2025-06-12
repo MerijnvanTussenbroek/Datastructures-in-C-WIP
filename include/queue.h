@@ -14,9 +14,7 @@ DEFINE_DOUBLE_LINKED_LIST(name, type);                      \
 typedef struct name##_queue name##_queue;                   \
 typedef struct name##_queue                                 \
 {                                                           \
-    name##_node* head;                                      \
-    name##_node* tail;                                      \
-    int length;                                             \
+    name##_DLL* DLL;                                        \
 };                                                          \
                                                             \
 name##_queue* name##_initializeQueue(type newData);         \

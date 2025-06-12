@@ -1,5 +1,5 @@
 #pragma once
 
-#include "stack.h"
+#include "double_linked_list.h"
 
-DEFINE_STACK(test, int);
+DEFINE_DOUBLE_LINKED_LIST(test, char);
