@@ -3,9 +3,9 @@
 
 #include "testingGrounds.h"
 
-#include "graph_impl.h"
+#include "linked_list_impl.h"
 
-DEFINE_GRAPH(test, int);
+DEFINE_LINKED_LIST(test, int);
 
 
 void printList(int* arr);

@@ -27,6 +27,8 @@ name##_GraphResult name##_pop(name##_stack* stack)\
         name##_removeItemFromLL(&stack->LL, 0);\
         return result;                      \
     }                                       \
+    name##_GraphResult r = { 0 };           \
+    return r;                               \
 }                                           \
                                             \
 void name##_destroyStack(name##_stack* stack)\

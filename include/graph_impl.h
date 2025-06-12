@@ -8,8 +8,9 @@ DEFINE_SET(name##_node*, name);                     \
 name##_node* name##_initializeGraph(char* newName)\
 {                                           \
     name##_node* node = malloc(sizeof(name##_node));\
-    *node->nodeName = *newName;               \
+    *node->nodeName = *newName;             \
     node->nodes = malloc(sizeof(name##_node));\
+    node->nodes[0] = NULL;                 \
     node->length = 1;                       \
     return node;                            \
 }                                           \

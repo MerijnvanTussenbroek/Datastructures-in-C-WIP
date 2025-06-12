@@ -5,150 +5,178 @@
 #define DEFINE_LINKED_LIST(name, type)  \
 DEFINE_GRAPH(name, type);               \
                                         \
-name##_node* name##_initializeLinkedList(type newData)\
+name##_LL* name##_initializeLinkedList(type newData)\
 {                                       \
-    name##_node* list = malloc(sizeof(name##_node));\
-    list->nodes = malloc(sizeof(name##_node *) * 1);\
-    list->nodes[0] = NULL;              \
-    list->data = newData;               \
-    list->length = 1;                   \
-    return list;                        \
+    name##_LL* LL = malloc(sizeof(name##_LL));\
+    LL->list = name##_initializeNode(newData);\
+    LL->totalLength = 1;                \
+    return LL;                          \
 }                                       \
                                         \
-void name##_addNewNodeToLL(name##_node* list, type newData)\
+name##_node* name##_initializeNode(type newData)\
 {                                       \
-    name##_node* current = list;        \
-    while(current->nodes[0] != NULL)    \
+    name##_node* node = malloc(sizeof(name##_node));\
+    node->nodes = malloc(sizeof(name##_node*));\
+    node->nodes = NULL;                 \
+    node->length = 1;                   \
+    return node;                        \
+}                                       \
+                                        \
+void name##_addNewNodeToLL(name##_LL* LL, type newData)\
+{                                       \
+    if(LL->list == NULL)                \
     {                                   \
-        current = current->nodes[0];    \
+        LL->list = name##_initializeNode(newData);\
     }                                   \
-    name##_node* newNode = name##_initializeLinkedList(newData);\
-    current->nodes[0] = newNode;        \
+    else                                \
+    {                                   \
+        name##_node* current = LL->list;\
+        while(current->nodes[0] != NULL)\
+        {                               \
+            current = current->nodes[0];\
+        }                               \
+        current->nodes[0] = name##_initializeNode(newData);\
+    }                                   \
+    LL->totalLength++;                  \
 }                                       \
                                         \
-void name##_insertNewNodeToLL(name##_node** list, type newData, int index)\
+void name##_insertNewNodeToLL(name##_LL* LL, type newData, int index)\
 {                                       \
-    name##_node* current = *list;       \
-                                        \
-    if(index == 0)                      \
+    if(LL->totalLength < index)         \
     {                                   \
-        name##_node* newNode = name##_initializeLinkedList(newData);\
-        newNode->nodes[0] = *list;      \
-        *list = newNode;                \
+        printf("Index too great");      \
         return;                         \
     }                                   \
-                                        \
-    while(index > 1)                    \
+    else                                \
     {                                   \
-        if(current->nodes[0] == NULL)   \
+        LL->totalLength++;              \
+        name##_node* newNode = name##_initializeNode(newData);\
+        if(index == 0)                  \
         {                               \
-            printf("trying to insert where it doesn't exist");\
-            return;                     \
+            name##_node* nodeToConnect = LL->list;\
+            newNode->nodes[0] = nodeToConnect;\
+            LL->list = newNode;         \
         }                               \
-                                        \
-        current = current->nodes[0];    \
-        index--;                        \
+        else                            \
+        {                               \
+            name##_node* current = LL->list;\
+            while(index > 1)            \
+            {                           \
+                if(current->nodes[0] == NULL)\
+                {                       \
+                    printf("Trying to insert a node outside the lists bounds");\
+                    return;             \
+                }                       \
+                else                    \
+                {                       \
+                    current = current->nodes[0];\
+                    index--;            \
+                }                       \
+            }                           \
+            name##_node* PreviousNode = current;\
+            name##_node* NextNode = current->nodes[0];\
+            PreviousNode->nodes[0] = newNode;\
+            newNode->nodes[0] = NextNode;\
+        }                               \
     }                                   \
-                                        \
-    name##_node* nodeToBeAdded = name##_initializeLinkedList(newData);\
-    name##_node* inbetween = current->nodes[0];\
-    current->nodes[0] = nodeToBeAdded;  \
-    nodeToBeAdded->nodes[0] = inbetween;\
 }                                       \
                                         \
-name##_GraphResult name##_retrieveDataFromLL(name##_node* list, int index)\
+name##_GraphResult name##_retrieveDataFromLL(name##_LL* LL, int index)\
 {                                       \
     name##_GraphResult result = { 0 };  \
-    name##_node* current = list;        \
+    if(index > LL->totalLength)         \
+        return result;                  \
+                                        \
+    name##_node* current = LL->list;    \
     while(index > 0)                    \
     {                                   \
         if(current->nodes[0] == NULL)   \
-        {                               \
-            printf("trying to retreive data that doesn't exist");\
             return result;              \
-        }                               \
                                         \
         current = current->nodes[0];    \
         index--;                        \
     }                                   \
-                                        \
     result.success = 1;                 \
     result.value = current->data;       \
     return result;                      \
 }                                       \
                                         \
-int name##_getSizeFromLL(name##_node* list)\
+int name##_getSizeFromLL(name##_LL* LL) \
 {                                       \
-    int length = 1;                     \
-    name##_node* current = list;        \
-    while(current->nodes[0] != NULL)    \
+    int size = 0;                       \
+    name##_node* current = LL->list;    \
+    while(current != NULL)              \
     {                                   \
         current = current->nodes[0];    \
-        length++;                       \
+        size++;                         \
     }                                   \
-    return length;                      \
+    return size;                        \
 }                                       \
                                         \
-void name##_removeItemFromLL(name##_node** list, int index)\
+void name##_removeItemFromLL(name##_LL* LL, int index)\
 {                                       \
-    name##_node* current = *list;       \
-                                        \
-    if(index < 0)                       \
-        return;                         \
-                                        \
-    if(index == 0)                      \
+    if(index > LL->totalLength)         \
     {                                   \
-        if(current->nodes[0] == NULL)   \
-        {                               \
-            printf("\nremoveitemfromLL current nodes0 == NULL");\
-            return;                     \
-        }                               \
-                                        \
-        name##_node* nodeToBeCon = current->nodes[0];\
-        current->nodes[0] = NULL;       \
-        name##_destroyLinkedList(current);\
-        *list = nodeToBeCon;            \
+        printf("Can't remove a node outside the bounds of the LL");\
         return;                         \
     }                                   \
-                                        \
-    while(index > 1)                    \
+    else                                \
     {                                   \
-        if(current->nodes[0] == NULL)   \
+        name##_node* nodeToBeRemoved;   \
+        name##_node* nodeToBeConnected; \
+        LL->totalLength--;              \
+        if(index == 0)                  \
         {                               \
-            printf("trying to remove that doesn't exist");\
-            return;                     \   
+            nodeToBeRemoved = LL->list; \
+            nodeToBeConnected = LL->list->nodes[0];\
+            free(nodeToBeRemoved->nodes);\
+            free(nodeToBeRemoved);      \
+            LL->list = nodeToBeConnected;\
         }                               \
-                                        \
-        current = current->nodes[0];    \
-        index--;                        \
+        else                            \
+        {                               \
+            name##_node* current = LL->list;\
+            while(index > 1)            \
+            {                           \
+                if(current->nodes[0] == NULL)\
+                {                       \
+                    return;             \
+                }                       \
+                else                    \
+                {                       \
+                    current = current->nodes[0];\
+                    index--;            \
+                }                       \
+            }                           \
+            nodeToBeRemoved = current->nodes[0];\
+            nodeToBeConnected = nodeToBeRemoved->nodes[0];\
+            current->nodes[0] = nodeToBeConnected;\
+            free(nodeToBeRemoved->nodes);\
+            free(nodeTOBeRemoved);      \
+        }                               \
     }                                   \
-                                        \
-    name##_node* nodeToBeRemoved = current->nodes[0];\
-    name##_node* nodeToBeConnected = nodeToBeRemoved->nodes[0];\
-    nodeToBeRemoved->nodes[0] = NULL;   \
-    name##_destroyGraph(nodeToBeRemoved);\
-    current->nodes[0] = nodeToBeConnected;\
 }                                       \
                                         \
-void name##_changeValueInLL(name##_node* list, int index, type newData)\
+void name##_changeValueInLL(name##_LL* LL, int index, type newData)\
 {                                       \
-    name##_node* current = list;        \
+    name##_node* current = LL->list;    \
     while(index > 0)                    \
     {                                   \
         if(current->nodes[0] == NULL)   \
         {                               \
-            printf("trying to change thzat doesn't exist");\
-            return;                     \        
+            return;                     \
         }                               \
-                                        \
-        current = current->nodes[0];    \
-        index--;                        \
+        else                            \
+        {                               \
+            current = current->nodes[0];\
+            index--;                    \
+        }                               \
     }                                   \
-                                        \
     current->data = newData;            \
 }                                       \
                                         \
-void name##_destroyLinkedList(name##_node* list)\
+void name##_destroyLinkedList(name##_LL* LL)\
 {                                       \
-    name##_destroyGraph(list);          \
+    name##_destroyGraph(LL->list);    \
+    free(LL);                         \
 }                                       
