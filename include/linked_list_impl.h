@@ -17,7 +17,7 @@ name##_node* name##_initializeNode(type newData)\
 {                                       \
     name##_node* node = malloc(sizeof(name##_node));\
     node->nodes = malloc(sizeof(name##_node*));\
-    node->nodes = NULL;                 \
+    node->nodes[0] = NULL;                 \
     node->length = 1;                   \
     return node;                        \
 }                                       \
@@ -152,7 +152,7 @@ void name##_removeItemFromLL(name##_LL* LL, int index)\
             nodeToBeConnected = nodeToBeRemoved->nodes[0];\
             current->nodes[0] = nodeToBeConnected;\
             free(nodeToBeRemoved->nodes);\
-            free(nodeTOBeRemoved);      \
+            free(nodeToBeRemoved);      \
         }                               \
     }                                   \
 }                                       \

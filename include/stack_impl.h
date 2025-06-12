@@ -15,7 +15,7 @@ name##_stack* name##_initializeStack(type newData)\
 void name##_push(name##_stack* stack, type newData)\
 {                                           \
     stack->length++;                        \
-    name##_insertNewNodeToLL(&stack->LL, newData, 0);\
+    name##_insertNewNodeToLL(stack->LL, newData, 0);\
 }                                           \
                                             \
 name##_GraphResult name##_pop(name##_stack* stack)\
@@ -24,7 +24,7 @@ name##_GraphResult name##_pop(name##_stack* stack)\
     {                                       \
         stack->length--;                    \
         name##_GraphResult result = name##_retrieveDataFromLL(stack->LL, 0);\
-        name##_removeItemFromLL(&stack->LL, 0);\
+        name##_removeItemFromLL(stack->LL, 0);\
         return result;                      \
     }                                       \
     name##_GraphResult r = { 0 };           \
