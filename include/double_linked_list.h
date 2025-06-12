@@ -12,12 +12,20 @@ Here, we made the following assumptions:
 #define DEFINE_DOUBLE_LINKED_LIST(name, type)       \
 DEFINE_GRAPH(name, type);                           \
                                                     \
+typedef struct name##_DLL name##_DLL;               \
+typedef struct name##_DLL                           \
+{                                                   \
+    name##_node* head;                              \
+    name##_node* tail;                              \
+    int length;                                     \
+};                                                  \
+                                                    \
 name##_node* name##_initializeDLL(type newData);     \
-void name##_DaddNewNode(name##_node* list, type newData);\
-void name##_DinsertNewNode(name##_node** list, type newData, int index);\
-name##_GraphResult name##_DretrieveData(name##_node * list, int index);\
-int name##_DgetSize(name##_node * list);\
-void name##_DremoveItem(name##_node** list, int index);\
-void name##_DchangeValue(name##_node* list, int index, type newData);\
-void name##_DdestroyLinkedList(name##_node* list);\
+void name##_DaddNewNode(name##_DLL* DLL, type newData);\
+void name##_DinsertNewNode(name##_DLL* DLL, type newData, int index);\
+name##_GraphResult name##_DretrieveData(name##_DLL* DLL, int index);\
+int name##_DgetSize(name##_DLL* DLL);\
+void name##_DremoveItem(name##_DLL* DLL, int index);\
+void name##_DchangeValue(name##_DLL* DLL, int index, type newData);\
+void name##_DdestroyLinkedList(name##_DLL* DLL);\
 
