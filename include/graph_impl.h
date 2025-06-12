@@ -1,6 +1,9 @@
 #pragma once
 
+#include "set_impl.h"
+
 #define DEFINE_GRAPH(name, type)            \
+DEFINE_SET(name##_node*, name);                     \
                                             \
 name##_node* name##_initializeGraph(char* newName)\
 {                                           \
@@ -43,14 +46,42 @@ void name##_addExistingNode(name##_node* origin, name##_node* nodeToBeAdded)\
                                             \
 void name##_destroyGraph(name##_node* node) \
 {                                           \
-    if(node->length > 0)                    \
+    name##_set* s = name##_initializeSet(10, name##_cmpFunc);\
+    name##_CollectAllNodes(node, s);        \
+    int size = s->l->size;                  \
+    for(int i = 0; i < size; i++)           \
+    {                                       \
+        free(s->l->data[i]->nodes);         \
+        free(s->l->data[i]);                \
+    }                                       \
+}                                           \
+                                            \
+int name##_cmpFunc(name##_node* node1, name##_node* node2)\
+{                                           \
+    if(node1->nodes == node2->nodes)        \
+    {                                       \
+        return 1;                           \
+    }                                       \
+    return 0;                               \
+}                                           \
+                                            \
+void name##_CollectAllNodes(name##_node* node, name##_set* s)\
+{                                           \
+    if(node == NULL)                        \
+        return;                             \
+                                            \
+    if(s == NULL || s->l == NULL)           \
+        return;                             \
+                                            \
+    if(name##_addToSet(s, node) == 1)       \
+    {                                       \
+        return;                             \
+    }                                       \
+    else                                    \
     {                                       \
         for(int i = 0; i < node->length; i++)\
         {                                   \
-            if(node->nodes[i] != NULL)      \
-                name##_destroyGraph(node->nodes[i]);\
+            name##_CollectAllNodes(node->nodes[i], s);\
         }                                   \
-        free(node->nodes);                  \
     }                                       \
-    free(node);                             \
-}
+}                                           

@@ -69,200 +69,56 @@ int isItPossible(int* arr1, int* arr2)
 #define DEFINE_BINARY_TREE(name, type)  \
 DEFINE_GRAPH(name, type);               \
                                         \
-static inline void name##_removeFromBinTree(name##_node* node, int index, name##_compFunc cmp)\
+name##_BT* name##_initializeBT(type initialValue, name##_compFunc f)\
 {                                       \
-    int* loc2 = turnIntoBinary(index);  \
-    int* loc1 = turnIntoBinary(1);      \
-    if(isItPossible(loc1, loc2) == 1)   \
-    {                                   \
-        name##_removeFromBT(node, index, 1, cmp);\
-        name##_reorganiseBT(node, cmp); \
-    }                                   \
-    else                                \
-    {                                   \
-        printf("Trying to remove a node from an impossible locations\n");\
-    }                                   \
-    free(loc1);                         \
-    free(loc2);                         \
-    return;                             \
+    name##_BT* bt = malloc(sizeof(name##_BT));\
+    bt->root = malloc(sizeof(name##_node));\
+    bt->f = f;                          \
+    bt->root->length = 2;               \
+    bt->root->nodes = malloc(sizeof(name##_node *) * 2);\
+    bt->root->nodes[0] = NULL;          \
+    bt->root->nodes[1] = NULL;          \
+    bt->root->data = initialValue;      \
+    return bt;                          \
 }                                       \
                                         \
-static inline name##_GraphResult name##_retrieveFromBinTree(name##_node* node, int index, name##_compFunc cmp)\
+void name##_destroyBT(name##_BT* bt)    \
 {                                       \
-    int* loc2 = turnIntoBinary(index);  \
-    int* loc1 = turnIntoBinary(1);      \
-    if(isItPossible(loc1, loc2) == 1)   \
-    {                                   \
-        free(loc1);                     \
-        free(loc2);                     \
-        return name##_retrieveFromBT(node, index, 1, cmp);\
-    }                                   \
-    else                                \
-    {                                   \
-        free(loc1);                     \
-        free(loc2);                     \
-        printf("Trying to remove a node from an impossible locations\n");\
-        name##_GraphResult result = { 0 };\
-        return result;                  \
-    }                                   \
+    \
 }                                       \
                                         \
-name##_node* name##_initializeBinaryTree(type newData)\
+void name##_addToBT(name##_BT* bt, type value)\
 {                                       \
-    name##_node* BT = malloc(sizeof(name##_node));\
-    BT->data = newData;                 \
-    BT->nodes = malloc(sizeof(name##_node *) * 2);\
-    BT->nodes[0] = NULL;                \
-    BT->nodes[1] = NULL;                \
-    BT->length = 2;                     \
-    return BT;                          \
+    \
 }                                       \
                                         \
-void name##_addToBT(name##_node* node, type newData, name##_compFunc cmp)\
+void name##_BTRemoveByIndex(name##_BT* bt, int index)\
 {                                       \
-    int result = cmp(newData, node->data);\
-    if(result == 1) /* newData < node->data*/\
-    {                                   \
-        if(node->nodes[0] == NULL)      \
-        {                               \
-            name##_node* newRightNode;  \
-            newRightNode = name##_initializeBinaryTree(newData);\
-            node->nodes[0] = newRightNode;\
-        }                               \
-        else                            \
-        {                               \
-            name##_addToBT(node->nodes[0], newData, cmp);\
-        }                               \
-    }                                   \
-    else  /* newData >= node->data*/    \
-    {                                   \
-        if(node->nodes[1] == NULL)      \
-        {                               \
-            name##_node* newLeftNode;   \
-            newLeftNode = name##_initializeBinaryTree(newData);\
-            node->nodes[1] = newLeftNode;\
-        }                               \
-        else                            \
-        {                               \
-            name##_addToBT(node->nodes[1], newData, cmp);\
-        }                               \
-    }                                   \
+    \
 }                                       \
                                         \
-void name##_addNodeToBT(name##_node* origin, name##_node* toBeAdded, name##_compFunc cmp)\
+void name##_BTRemoveByValue(name##_BT* bt, type value)\
 {                                       \
-int result = cmp(toBeAdded->data, origin->data);\
-    if(result == 1) /* toBeAdded->data < origin->data*/\
-    {                                   \
-        if(origin->nodes[0] == NULL)    \
-        {                               \
-            origin->nodes[0] = toBeAdded;\
-        }                               \
-        else                            \
-        {                               \
-            name##_addNodeToBT(origin->nodes[0], toBeAdded, cmp);\
-        }                               \
-    }                                   \
-    else  /* toBeAdded->data >= node->data*/    \
-    {                                   \
-        if(origin->nodes[1] == NULL)      \
-        {                               \
-            origin->nodes[1] = toBeAdded;\
-        }                               \
-        else                            \
-        {                               \
-            name##_addNodeToBT(origin->nodes[1], toBeAdded, cmp);\
-        }                               \
-    }                                   \
+    \
 }                                       \
                                         \
-void name##_removeFromBT(name##_node* node, int index, int location, name##_compFunc cmp)\
+int name##_BTContains(name##_BT* bt, type value)\
 {                                       \
-    name##_node* nodeToBeRemoved;       \
-    name##_node* child1;                \
-    name##_node* child2;                \
-    int result;                         \
-    if(location * 2 == index)           \
-    {                                   \
-        nodeToBeRemoved = node->nodes[0];\
-    }                                   \
-    else if(location * 2 + 1 == index)  \
-    {                                   \
-        nodeToBeRemoved = node->nodes[1];\
-    }                                   \
-    else                                \
-    {                                   \
-        int* loc1 = turnIntoBinary(location);\
-        int* loc2 = turnIntoBinary(index);\
-        int nextPost = determineNextPos(loc1, loc2);\
-        if(nextPost == 1)               \
-        {                               \
-            name##_removeFromBT(node->nodes[1], index, location * 2 + 1, cmp);\
-        }                               \
-        else                            \
-        {                               \
-            name##_removeFromBT(node->nodes[0], index, location * 2, cmp);\
-        }                               \
-        free(loc1);                     \
-        free(loc2);                     \
-    }                                   \
-    child1 = nodeToBeRemoved->nodes[0]; \
-    child2 = nodeToBeRemoved->nodes[1]; \
-    name##_addNodeToBT(child1, child2, cmp);\
-                                        \
-    if(location * 2 == index)           \
-    {                                   \
-        node->nodes[0] = child1;        \
-    }                                   \
-    else if(location * 2 + 1 == index)  \
-    {                                   \
-        node->nodes[0] = child2;        \
-    }                                   \
-    return;                             \
+    \
 }                                       \
                                         \
-void name##_reorganiseBT(name##_node* node, name##_compFunc cmp)\
+name##_GraphResult name##_BTRetrieve(name##_BT* bt, int index)\
 {                                       \
-    /*yet to be implemented*/\
+    \
 }                                       \
                                         \
-void name##_deleteBT(name##_node* node) \
+void name##_BTCombine(name##_BT* origin, name##_BT* BTToBeAdded)\
 {                                       \
-    if(node->nodes[0] != NULL)          \
-    {                                   \
-        name##_deleteBT(node->nodes[0]);\
-    }                                   \
-    if(node->nodes[1] != NULL)          \
-    {                                   \
-        name##_deleteBT(node->nodes[1]);\
-    }                                   \
-    free(node->nodes);                  \
-    free(node);                         \
+    \
 }                                       \
                                         \
-name##_GraphResult name##_retrieveFromBT(name##_node* node, int index, int location, name##_compFunc cmp)\
+void name##_ReorganizeBT(name##_BT* bt) \
 {                                       \
-    if(location == index)               \
-    {                                   \
-        name##_GraphResult result = { 0 };\
-        result.success = 1;             \
-        result.value = node->data;       \
-        return result;                  \
-    }                                   \
-    else                                \
-    {                                   \
-        int* loc1 = turnIntoBinary(location);\
-        int* loc2 = turnIntoBinary(index);\
-        int nextPost = determineNextPos(loc1, loc2);\
-        free(loc1);                     \
-        free(loc2);                     \
-        if(nextPost == 1)               \
-        {                               \
-            return name##_retrieveFromBT(node->nodes[1], index, location * 2 + 1, cmp);\
-        }                               \
-        else                            \
-        {                               \
-            return name##_retrieveFromBT(node->nodes[0], index, location * 2, cmp);\
-        }                               \
-    }                                   \
-}                                       
+    \
+}                                       \
+

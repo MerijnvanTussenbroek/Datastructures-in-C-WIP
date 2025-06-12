@@ -27,7 +27,7 @@ typedef void (*name##_callback)(key inputKey);  \
 typedef int (*name##_keycmp)(key input1, key input2);\
                                                 \
 name##_hashset* name##_initializehashset(int newSize);\
-void name##_addToHashset(name##_hashset* set, key theKey);\
+void name##_addToHashset(name##_hashset* set, key theKey, name##_keycmp cmp);\
 void name##_iterationFunc(name##_hashset* set, name##_callback func);\
 void name##_destroyHashset(name##_hashset* set);\
 void name##_destroySpecialLL(name##_specialNode* next);\

@@ -3,9 +3,10 @@
 
 #include "testingGrounds.h"
 
-#include "hashset_impl.h"
+#include "graph_impl.h"
 
-DEFINE_HASHSET(test, char);
+DEFINE_GRAPH(test, int);
+
 
 void printList(int* arr);
 

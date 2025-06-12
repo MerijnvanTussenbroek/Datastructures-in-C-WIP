@@ -1,5 +1,5 @@
 #pragma once
 
-#include "hashset.h"
+#include "graph.h"
 
-DEFINE_HASHSET(test, char);
+DEFINE_GRAPH(test, int);

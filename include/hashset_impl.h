@@ -35,7 +35,7 @@ name##_hashset* name##_initializehashset(int newSize)\
     return set;                     \
 }                                   \
                                     \
-void name##_addToHashset(name##_hashset* set, key theKey)\
+void name##_addToHashset(name##_hashset* set, key theKey, name##_keycmp cmp)\
 {                                   \
     int index = (int)(hashsetFunction((void *)theKey, sizeof(theKey)) % set->length);\
     name##_specialNode* node = malloc(sizeof(name##_specialNode));\
@@ -51,7 +51,14 @@ void name##_addToHashset(name##_hashset* set, key theKey)\
     {                               \
         name##_specialNode* current = set->map[index];\
         while(current->next != NULL)\
+        {                           \
+            if(cmp(current->theKey, theKey) == 1)\
+            {                       \
+                free(node);         \
+                return;             \
+            }                       \
             current = current->next;\
+        }                           \
                                     \
         current->next = node;       \
     }                               \

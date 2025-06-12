@@ -1,5 +1,8 @@
+#pragma once
+
 #include <stdlib.h>
 #include <stdio.h>
+#include "set.h"
 
 #define DEFINE_GRAPH(name, type)        \
 typedef struct name##_node name##_node; \
@@ -17,9 +20,12 @@ typedef struct                          \
     type value;                         \
 } name##_GraphResult;                   \
                                         \
+DEFINE_SET(name##_node* , name);        \
 name##_node* name##_initializeGraph(char* newName);\
 void name##_addNewNode(name##_node* node, char* newName);\
 void name##_removeNode(name##_node* node, int index);\
 void name##_addExistingNode(name##_node* origin, name##_node* nodeToBeAdded);\
-void name##_destroyGraph(name##_node* node);
+void name##_destroyGraph(name##_node* node);\
+int name##_cmpFunc(name##_node* node1, name##_node* node2);\
+void name##_CollectAllNodes(name##_node* node, name##_set* s);
 
