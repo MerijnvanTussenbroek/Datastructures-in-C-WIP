@@ -1,5 +1,5 @@
 #pragma once
 
-#include "double_linked_list.h"
+#include "tree.h"
 
-DEFINE_DOUBLE_LINKED_LIST(test, char);
+DEFINE_TREE(test, int);

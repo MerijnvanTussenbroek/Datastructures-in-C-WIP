@@ -3,9 +3,9 @@
 
 #include "testingGrounds.h"
 
-#include "double_linked_list_impl.h"
+#include "tree_impl.h"
 
-DEFINE_DOUBLE_LINKED_LIST(test, char);
+DEFINE_TREE(test, int);
 
 
 void printList(int* arr);

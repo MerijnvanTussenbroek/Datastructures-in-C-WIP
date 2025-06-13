@@ -5,20 +5,19 @@
 #define DEFINE_GRAPH(name, type)            \
 DEFINE_SET(name##_node*, name);                     \
                                             \
-name##_node* name##_initializeGraph(char* newName)\
+name##_node* name##_initializeGraph()\
 {                                           \
     name##_node* node = malloc(sizeof(name##_node));\
-    *node->nodeName = *newName;             \
     node->nodes = malloc(sizeof(name##_node));\
     node->nodes[0] = NULL;                 \
     node->length = 1;                       \
     return node;                            \
 }                                           \
                                             \
-void name##_addNewNode(name##_node* node, char* newName)\
+void name##_addNewNode(name##_node* node)\
 {                                           \
     node->nodes = realloc(node->nodes, (node->length + 1) * sizeof(name##_node *));\
-    name##_node* newNode = name##_initializeGraph(newName);\
+    name##_node* newNode = name##_initializeGraph();\
     newNode->length = 0;                    \
     newNode->nodes = NULL;                  \
     *node->nodes[node->length] = *newNode;  \
