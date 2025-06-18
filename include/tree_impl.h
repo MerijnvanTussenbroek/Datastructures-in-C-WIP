@@ -49,12 +49,33 @@ void name##_addToTree(name##_node* n, int* setOfMoves, int length, int depth, ty
     }                               \
 }                                   \
                                     \
+void name##_changeValueInTree(name##_node* n, int* setOfMoves, int length, int depth, type newData)\
+{                                   \
+    if(depth == length - 1)         \
+    {                               \
+        /*We are at the right node*/\
+        name##_node** nodes = n->nodes;\
+        name##_node* current = nodes[length - 1];\
+        current->data = newData;    \
+    }                               \
+    else                            \
+    {                               \
+        int nextMove = setOfMoves[depth];\
+        if(nextMove >= n->length)   \
+        {                           \
+            return;                 \
+        }                           \
+        name##_changeValueInTree(n->nodes[nextMove], setOfMoves, length, depth+1, newData);\
+    }                               \
+}                                   \
+                                    \
 void name##_removeFromTree(name##_node* n, int* setOfMoves, int length, int depth, type newData)\
 {                                   \
     if(depth == length - 1)         \
     {                               \
         /*We are at the right node*/\
         name##_node** nodes = n->nodes;\
+        n->length--;                \
         name##_node* toBeRemoved = nodes[length-1];\
         for(int i = length-1; i < n->length - 1; i++)\
         {                           \

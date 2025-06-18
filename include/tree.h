@@ -16,4 +16,5 @@ typedef struct name##_tree          \
 name##_tree* name##_initializeTree(type newData);\
 void name##_destroyTree(name##_tree* t);\
 void name##_addToTree(name##_node* n, int* setOfMoves, int length, int depth, type newData);\
+void name##_changeValueInTree(name##_node* n, int* setOfMoves, int length, int depth, type newData);\
 void name##_removeFromTree(name##_node* n, int* setOfMoves, int length, int depth, type newData);

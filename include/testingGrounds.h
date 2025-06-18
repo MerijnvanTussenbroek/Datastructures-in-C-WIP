@@ -1,5 +1,5 @@
 #pragma once
 
-#include "tree.h"
+#include "binary_tree.h"
 
-DEFINE_TREE(test, int);
+DEFINE_BINARY_TREE(test, int);

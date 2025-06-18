@@ -84,4 +84,4 @@ void name##_CollectAllNodes(name##_node* node, name##_set* s)\
             name##_CollectAllNodes(node->nodes[i], s);\
         }                                   \
     }                                       \
-}                                           
+}

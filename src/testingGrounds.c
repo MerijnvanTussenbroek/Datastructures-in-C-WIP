@@ -3,9 +3,9 @@
 
 #include "testingGrounds.h"
 
-#include "tree_impl.h"
+#include "binary_tree_impl.h"
 
-DEFINE_TREE(test, int);
+DEFINE_BINARY_TREE(test, int);
 
 
 void printList(int* arr);
