@@ -1,5 +1,5 @@
 #pragma once
 
-#include "double_linked_list.h"
+#include "heap.h"
 
-DEFINE_DOUBLE_LINKED_LIST(test, int);
+DEFINE_HEAP(test, int);

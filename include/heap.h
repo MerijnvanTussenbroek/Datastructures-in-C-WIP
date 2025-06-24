@@ -18,8 +18,10 @@ typedef struct name##_heap          \
                                     \
 name##_heap* name##_initializeHeap(type data, name##_HeapCompFunc f);\
 void name##_destroyHeap(name##_heap* heap);\
-int name##_addToHeap(name##_heap* heap, type value);\
-int name##_removeFromHeapIndex(name##_heap*, int index);\
-int name##_removeFromHeapValue(name##_heap* heap, type value);\
-int name##_ContainsHeap(name##_heap* heap, type value);\
-name##_GraphResult name##_HeapRetrieve(name##_heap* heap, int index);
+int name##_addToHeap(name##_HeapCompFunc f, name##_node* current, type value, int* moves, int depth);\
+int name##_removeFromHeapIndex(name##_HeapCompFunc f, name##_node* current, int* moves, int depth);\
+int name##_removeFromHeapValue(name##_HeapCompFunc f, name##_node* current, type value);\
+int name##_ContainsHeap(name##_HeapCompFunc f, name##_node* current, type value);\
+name##_GraphResult name##_HeapRetrieve(name##_HeapCompFunc f, name##_node* current, int* moves, int depth);\
+void name##_HeapAddNode(name##_HeapCompFunc f, name##_node* origin, name##_node* nodeToBeAdded);\
+void name##_RestoreHeapBalance(name##_HeapCompFunc f, name##_node* current);

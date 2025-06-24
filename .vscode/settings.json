@@ -24,6 +24,7 @@
         "queue_impl.h": "c",
         "dictionary.h": "c",
         "stdio.h": "c",
-        "graph.h": "c"
+        "graph.h": "c",
+        "random": "c"
     }
 }

@@ -71,6 +71,9 @@ int isItPossible(int* arr1, int* arr2)
     return success;
 }
 
+//navigating using binary representations must be redone
+//as the navigation does not currently work
+
 #define DEFINE_BINARY_TREE(name, type)  \
 DEFINE_GRAPH(name, type);               \
                                         \
