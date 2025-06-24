@@ -7,7 +7,7 @@ DEFINE_LINKED_LIST(name,type);              \
 typedef struct name##_stack name##_stack;   \
 typedef struct name##_stack                 \
 {                                           \
-    name##_LL* LL;                        \
+    name##_LL* LL;                          \
     int length;                             \
 };                                          \
                                             \

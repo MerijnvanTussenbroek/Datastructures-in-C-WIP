@@ -65,8 +65,9 @@ void name##_insertIntoListAt(name##_list *l, int index, type value)\
         l->data = temp;                 \
     }                                   \
                                         \
-    for(int i = index; i < l->size; i++){\
-        l->data[i+1] = l->data[i];      \
+    for(int i = l->size; i > index; i--)\
+    {                                   \
+        l->data[i] = l->data[i-1];      \
     }                                   \
     l->size++;                          \
     l->data[index] = value;             \
@@ -74,8 +75,8 @@ void name##_insertIntoListAt(name##_list *l, int index, type value)\
                                         \
 void name##_deleteList(name##_list *l)  \
 {                                       \
-    if(!l) exit(-1);                    \
-    if(!l->data) exit(-1);              \
+    if(l == NULL) exit(-1);             \
+    if(l->data == NULL) exit(-1);       \
     free(l->data);                      \
     free(l);                            \
 }                                       \
@@ -96,7 +97,7 @@ name##_result name##_retrieveFromList(name##_list *l, int index)\
 /* To do this, youll have to define your own comparison function that must adhere to the following requirements */\
 /* The output is an integer, if the first input is less than the second, return 1, otherwise return 0*/\
 /*so for example, with 5 < 6 you return 1, but for 8 < 2 you return 0 or anything BUT 1*/\
-void name##_sortList(name##_list *l, compare cmp)    \
+void name##_sortList(name##_list *l, name##_compare cmp)    \
 {                                       \
     for(int i = 0; i < l->size; i++)    \
     {                                   \

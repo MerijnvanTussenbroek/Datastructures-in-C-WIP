@@ -19,7 +19,7 @@ typedef struct name##_result            \
     type value;                         \
 };                                      \
                                         \
-typedef int (*compare)(const type, const type);\
+typedef int (*name##_compare)(type input1, type input2);\
                                         \
 name##_list* name##_listCreate(int newSize);\
 void name##_addToList(name##_list *l, type value);\
@@ -28,6 +28,6 @@ void name##_removeFromList(name##_list *l, int index);\
 void name##_insertIntoListAt(name##_list *l, int index, type value);\
 void name##_deleteList(name##_list *l);\
 name##_result name##_retrieveFromList(name##_list *l, int index);\
-void name##_sortList(name##_list *l, compare cmp);\
+void name##_sortList(name##_list *l, name##_compare cmp);\
 void name##_combineLists(name##_list *l1, name##_list* l2);
 

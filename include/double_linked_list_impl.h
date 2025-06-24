@@ -17,12 +17,12 @@ name##_DLL* name##_initializeDLL(type newData)      \
 {                                                   \
     name##_DLL* DLL = malloc(sizeof(name##_DLL));   \
     DLL->head = malloc(sizeof(name##_node));        \
-    DLL->tail = DLL->head;                          \
     DLL->head->data = newData;                      \
     DLL->head->length = 2;                          \
     DLL->head->nodes = malloc(sizeof(name##_node *) * 2);\
     DLL->head->nodes[0] = NULL;                     \
     DLL->head->nodes[1] = NULL;                     \
+    DLL->tail = DLL->head;                          \
     DLL->length = 1;                                \
     return DLL;                                     \
 }                                                   \
@@ -35,6 +35,7 @@ void name##_DaddNewNode(name##_DLL* DLL, type newData)\
     newNode->nodes = malloc(sizeof(name##_node *) * 2);\
     newNode->nodes[0] = NULL;                       \
     newNode->nodes[1] = previousHead;               \
+    newNode->length = 2;                            \
     previousHead->nodes[0] = newNode;               \
     DLL->head = newNode;                            \
     DLL->length++;                                  \
@@ -115,6 +116,16 @@ name##_GraphResult name##_DretrieveData(name##_DLL* DLL, int index)\
     return result;                                  \
 }                                                   \
                                                     \
+void name##_DLLIterate(name##_DLL* DLL, name##_DLLIterationFunc f)\
+{                                                   \
+    name##_node* current = DLL->tail;               \
+    while(current != NULL)                          \
+    {                                               \
+        f(current->data);                           \
+        current = current->nodes[0];                \
+    }                                               \
+}                                                   \
+                                                    \
 int name##_DgetSize(name##_DLL* DLL)                \
 {                                                   \
     if(DLL->head == NULL)                           \
@@ -148,6 +159,7 @@ void name##_DremoveItem(name##_DLL* DLL, int index) \
         toBeConnected = DLL->head->nodes[1];        \
         toBeRemoved = DLL->head;                    \
         DLL->head = toBeConnected;                  \
+        DLL->head->nodes[0] = NULL;                 \
         free(toBeRemoved->nodes);                   \
         free(toBeRemoved);                          \
     }                                               \
@@ -156,6 +168,7 @@ void name##_DremoveItem(name##_DLL* DLL, int index) \
         toBeConnected = DLL->tail->nodes[0];        \
         toBeRemoved = DLL->tail;                    \
         DLL->tail = toBeConnected;                  \
+        DLL->tail->nodes[1] = NULL;                 \
         free(toBeRemoved->nodes);                   \
         free(toBeRemoved);                          \
     }                                               \

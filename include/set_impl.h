@@ -39,16 +39,16 @@ int name##_addToSet(name##_set* set, type data)\
         }                       \
     }                           \
     if(isIn == 0)               \
-    {                           \
+    {/*it is not yet in the set*/\
         name##_addToList(set->l, data);\
         return 1;               \
     }                           \
-    return 0;                   \
+    return 0;/*the item is already in the set*/\
 }                               \
                                 \
 int name##_removeFromSet(name##_set* set, type data)\
 {                               \
-    int isIn = 0;               \
+    int isIn = -1;               \
     int size = set->l->size;    \
     for(int i = 0; i < size; i++)\
     {                           \
@@ -59,7 +59,7 @@ int name##_removeFromSet(name##_set* set, type data)\
         }                       \
     }                           \
                                 \
-    if(isIn == 0)               \
+    if(isIn == -1)               \
     {                           \
         return 0;               \
     }                           \
@@ -101,4 +101,5 @@ void name##_setCombine(name##_set* origin, name##_set* setToBeConnected)\
     name##_deleteList(origin->l);\
     origin->l = newSet->l;      \
     free(newSet);               \
+    name##_destroySet(setToBeConnected);\
 }                               

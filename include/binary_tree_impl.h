@@ -88,6 +88,35 @@ name##_BT* name##_initializeBT(type initialValue, name##_compFunc f)\
     return bt;                          \
 }                                       \
                                         \
+static inline void name##_BTRemove1(name##_BT* bt, type value)\
+{                                       \
+    name##_BTRemoveByValue(bt->f, bt->root, value);\
+}                                       \
+                                        \
+static inline void name##_BTRemove2(name##_BT* bt, int index)\
+{                                       \
+    returnStruct name##_s = turnIntoBinary(index);\
+    name##_BTRemoveByIndex(bt->f, bt->root, 0, name##_s.list, name##_s.length);\
+}                                       \
+                                        \
+static inline int name##_BTContains1(name##_BT* bt, type value)\
+{                                       \
+    return name##_BTContains(bt->f, bt->root, value);\
+}                                       \
+                                        \
+static inline name##_GraphResult name##_BTRetrieve1(name##_BT* bt, int index)\
+{                                       \
+    returnStruct name##_s = turnIntoBinary(index);\
+    return name##_BTRetrieve(bt->f, bt->root, 0, name##_s.list, name##_s.length);\
+}                                       \
+                                        \
+static inline void name##_CombineBT1(name##_BT* bt1, name##_BT* bt2)\
+{                                       \
+    name##_BTCombine(bt1->f, bt1->root, bt2->root);\
+    name##_ReorganizeBT(bt1);           \
+    name##_destroyBT(bt2);              \
+}                                       \
+                                        \
 void name##_destroyBT(name##_BT* bt)    \
 {                                       \
     name##_destroyGraph(bt->root);      \

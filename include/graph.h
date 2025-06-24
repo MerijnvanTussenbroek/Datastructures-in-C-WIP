@@ -20,7 +20,7 @@ typedef struct                          \
 } name##_GraphResult;                   \
                                         \
 DEFINE_SET(name##_node* , name);        \
-name##_node* name##_initializeGraph();\
+name##_node* name##_initializeGraph();  \
 void name##_addNewNode(name##_node* node);\
 void name##_removeNode(name##_node* node, int index);\
 void name##_addExistingNode(name##_node* origin, name##_node* nodeToBeAdded);\

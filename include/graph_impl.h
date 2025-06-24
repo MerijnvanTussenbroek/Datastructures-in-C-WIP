@@ -3,7 +3,7 @@
 #include "set_impl.h"
 
 #define DEFINE_GRAPH(name, type)            \
-DEFINE_SET(name##_node*, name);                     \
+DEFINE_SET(name##_node* , name);                     \
                                             \
 name##_node* name##_initializeGraph()\
 {                                           \
@@ -70,10 +70,13 @@ void name##_CollectAllNodes(name##_node* node, name##_set* s)\
     if(node == NULL)                        \
         return;                             \
                                             \
-    if(s == NULL || s->l == NULL)           \
+    if(s == NULL)                           \
         return;                             \
                                             \
-    if(name##_addToSet(s, node) == 1)       \
+    if(s->l == NULL)                        \
+        return;                             \
+                                            \
+    if(name##_addToSet(s, node) == 0)       \
     {                                       \
         return;                             \
     }                                       \
@@ -81,7 +84,8 @@ void name##_CollectAllNodes(name##_node* node, name##_set* s)\
     {                                       \
         for(int i = 0; i < node->length; i++)\
         {                                   \
-            name##_CollectAllNodes(node->nodes[i], s);\
+            if(node->nodes[i] != NULL)      \
+                name##_CollectAllNodes(node->nodes[i], s);\
         }                                   \
     }                                       \
 }

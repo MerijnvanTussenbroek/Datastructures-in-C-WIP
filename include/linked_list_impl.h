@@ -17,8 +17,9 @@ name##_node* name##_initializeNode(type newData)\
 {                                       \
     name##_node* node = malloc(sizeof(name##_node));\
     node->nodes = malloc(sizeof(name##_node*));\
-    node->nodes[0] = NULL;                 \
+    node->nodes[0] = NULL;              \
     node->length = 1;                   \
+    node->data = newData;               \
     return node;                        \
 }                                       \
                                         \
@@ -101,6 +102,16 @@ name##_GraphResult name##_retrieveDataFromLL(name##_LL* LL, int index)\
     return result;                      \
 }                                       \
                                         \
+void name##_iterateOverLL(name##_LL* LL, name##_LLIterationFunc f)\
+{                                       \
+    name##_node* current = LL->list;    \
+    while(current != NULL)              \
+    {                                   \
+        f(current->data);               \
+        current = current->nodes[0];    \
+    }                                   \
+}                                       \
+                                        \
 int name##_getSizeFromLL(name##_LL* LL) \
 {                                       \
     int size = 0;                       \
@@ -157,7 +168,7 @@ void name##_removeItemFromLL(name##_LL* LL, int index)\
     }                                   \
 }                                       \
                                         \
-void name##_changeValueInLL(name##_LL* LL, int index, type newData)\
+void name##_changeValueinLL(name##_LL* LL, int index, type newData)\
 {                                       \
     name##_node* current = LL->list;    \
     while(index > 0)                    \

@@ -20,10 +20,13 @@ typedef struct name##_DLL                           \
     int length;                                     \
 };                                                  \
                                                     \
+typedef void (*name##_DLLIterationFunc)(type input);\
+                                                    \
 name##_DLL* name##_initializeDLL(type newData);     \
 void name##_DaddNewNode(name##_DLL* DLL, type newData);\
 void name##_DinsertNewNode(name##_DLL* DLL, type newData, int index);\
 name##_GraphResult name##_DretrieveData(name##_DLL* DLL, int index);\
+void name##_DLLIterate(name##_DLL* DLL, name##_DLLIterationFunc f);\
 int name##_DgetSize(name##_DLL* DLL);\
 void name##_DremoveItem(name##_DLL* DLL, int index);\
 void name##_DchangeValue(name##_DLL* DLL, int index, type newData);\
