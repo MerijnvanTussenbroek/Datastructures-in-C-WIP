@@ -1,5 +1,5 @@
 #pragma once
 
-#include "heap.h"
+#include "hashmap.h"
 
-DEFINE_HEAP(test, int);
+DEFINE_HASHMAP(test, int, int);
