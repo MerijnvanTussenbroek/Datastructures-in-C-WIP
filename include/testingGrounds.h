@@ -1,5 +1,5 @@
 #pragma once
 
-#include "hashmap.h"
+#include "hashset.h"
 
-DEFINE_HASHMAP(test, int, int);
+DEFINE_HASHSET(test, int);
