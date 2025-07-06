@@ -3,24 +3,22 @@
 #include "set_impl.h"
 
 #define DEFINE_GRAPH(name, type)            \
-DEFINE_SET(name##_node* , name);                     \
+DEFINE_SET(name##_node* , name);            \
                                             \
-name##_node* name##_initializeGraph()\
+name##_node* name##_initializeGraph(type newData)\
 {                                           \
     name##_node* node = malloc(sizeof(name##_node));\
-    node->nodes = malloc(sizeof(name##_node));\
-    node->nodes[0] = NULL;                 \
-    node->length = 1;                       \
+    node->length = 0;                       \
+    node->nodes = NULL;                     \
+    node->data = newData;                   \
     return node;                            \
 }                                           \
                                             \
-void name##_addNewNode(name##_node* node)\
+void name##_addNewNode(name##_node* node, type newData)\
 {                                           \
     node->nodes = realloc(node->nodes, (node->length + 1) * sizeof(name##_node *));\
-    name##_node* newNode = name##_initializeGraph();\
-    newNode->length = 0;                    \
-    newNode->nodes = NULL;                  \
-    *node->nodes[node->length] = *newNode;  \
+    name##_node* newNode = name##_initializeGraph(newData);\
+    node->nodes[node->length] = newNode;    \
     node->length++;                         \
 }                                           \
                                             \
@@ -34,6 +32,7 @@ void name##_removeNode(name##_node* node, int index)\
     {                                       \
         node->nodes[i] = node->nodes[i+1];  \
     }                                       \
+    free(nodeToBeRemoved->nodes);           \
     free(nodeToBeRemoved);                  \
 }                                           \
                                             \

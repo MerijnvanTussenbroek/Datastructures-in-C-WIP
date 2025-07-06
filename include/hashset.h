@@ -16,20 +16,21 @@ typedef struct name##_specialNode               \
     name##_specialNode* next;                   \
 };                                              \
                                                 \
+typedef int (*name##_keycmp)(key input1, key input2);\
+typedef void (*name##_callback)(key inputKey);  \
+                                                \
 typedef struct name##_hashset name##_hashset;   \
 typedef struct name##_hashset                   \
 {                                               \
     name##_specialNode** map;                   \
+    name##_keycmp cmp;                          \
     size_t length;                              \
 };                                              \
                                                 \
-typedef void (*name##_callback)(key inputKey);  \
-typedef int (*name##_keycmp)(key input1, key input2);\
-                                                \
-name##_hashset* name##_initializehashset(int newSize);\
-void name##_addToHashset(name##_hashset* set, key theKey, name##_keycmp cmp);\
+name##_hashset* name##_initializehashset(int newSize, name##_keycmp cmp);\
+void name##_addToHashset(name##_hashset* set, key theKey);\
 void name##_iterationFunc(name##_hashset* set, name##_callback func);\
 void name##_destroyHashset(name##_hashset* set);\
 void name##_destroySpecialLL(name##_specialNode* next);\
-int name##_containsHashset(name##_hashset* set, key theKey, name##_keycmp cmp);\
-int name##_removeFromHashset(name##_hashset* set, key theKey, name##_keycmp cmp);
+int name##_containsHashset(name##_hashset* set, key theKey);\
+int name##_removeFromHashset(name##_hashset* set, key theKey);

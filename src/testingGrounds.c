@@ -9,23 +9,23 @@ int compFunc(int a, int b);
 
 int main(){
 
-    test_hashset* set = test_initializehashset(10);
+    test_hashset* set = test_initializehashset(10, compFunc);
 
-    test_addToHashset(set, 0, compFunc);
-    test_addToHashset(set, 1, compFunc);
-    test_addToHashset(set, 2, compFunc);
-    test_addToHashset(set, 3, compFunc);
-    test_addToHashset(set, 4, compFunc);
+    test_addToHashset(set, 0);
+    test_addToHashset(set, 1);
+    test_addToHashset(set, 2);
+    test_addToHashset(set, 3);
+    test_addToHashset(set, 4);
 
     test_iterationFunc(set, printNum);
 
-    int test1 = test_containsHashset(set, 10, compFunc);
-    int test2 = test_containsHashset(set, 1, compFunc);
+    int test1 = test_containsHashset(set, 10);
+    int test2 = test_containsHashset(set, 1);
 
     printf("\n%d %d\n", test1, test2);
 
-    int test3 = test_removeFromHashset(set, 10, compFunc);
-    int test4 = test_removeFromHashset(set, 1, compFunc);
+    int test3 = test_removeFromHashset(set, 10);
+    int test4 = test_removeFromHashset(set, 1);
 
     printf("\n%d %d\n", test1, test2);
 

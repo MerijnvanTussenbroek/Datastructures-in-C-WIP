@@ -20,7 +20,7 @@ uint64_t hashsetFunction(const void *data, size_t size)
 
 #define DEFINE_HASHSET(name, key)   \
                                     \
-name##_hashset* name##_initializehashset(int newSize)\
+name##_hashset* name##_initializehashset(int newSize, name##_keycmp cmp)\
 {                                   \
     name##_hashset* set = malloc(sizeof(name##_hashset));\
     set->map = malloc(sizeof(name##_specialNode *) * newSize);\
@@ -29,10 +29,11 @@ name##_hashset* name##_initializehashset(int newSize)\
         set->map[i] = NULL;         \
     }                               \
     set->length = newSize;          \
+    set->cmp = cmp;                 \
     return set;                     \
 }                                   \
                                     \
-void name##_addToHashset(name##_hashset* set, key theKey, name##_keycmp cmp)\
+void name##_addToHashset(name##_hashset* set, key theKey)\
 {                                   \
     int index = (int)(hashsetFunction((void *)&theKey, sizeof(theKey)) % set->length);\
     name##_specialNode* node = malloc(sizeof(name##_specialNode));\
@@ -100,13 +101,13 @@ void name##_destroySpecialLL(name##_specialNode* next)\
     free(next);                     \
 }                                   \
                                     \
-int name##_containsHashset(name##_hashset* set, key theKey, name##_keycmp cmp)\
+int name##_containsHashset(name##_hashset* set, key theKey)\
 {                                   \
     int index = (int)(hashsetFunction((void *)&theKey, sizeof(theKey)) % set->length);\
     name##_specialNode* current = set->map[index];\
     while(current != NULL)          \
     {                               \
-        if(cmp(current->theKey, theKey) == 1)\
+        if(set->cmp(current->theKey, theKey) == 1)\
             return 1;               \
                                     \
         current = current->next;    \
@@ -115,13 +116,13 @@ int name##_containsHashset(name##_hashset* set, key theKey, name##_keycmp cmp)\
     return 0;                       \
 }                                   \
                                     \
-int name##_removeFromHashset(name##_hashset* set, key theKey, name##_keycmp cmp)\
+int name##_removeFromHashset(name##_hashset* set, key theKey)\
 {                                   \
     int index = (int)(hashsetFunction((void *)&theKey, sizeof(theKey)) % set->length);\
     name##_specialNode* current = set->map[index];\
     while(current != NULL)          \
     {                               \
-        if(cmp(theKey, current->theKey) == 1)\
+        if(set->cmp(theKey, current->theKey) == 1)\
         {                           \
             current->isUsed = 0;    \
             return 1;               \
