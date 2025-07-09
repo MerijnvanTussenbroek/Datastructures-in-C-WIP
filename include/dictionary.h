@@ -28,4 +28,5 @@ name##_dictionary* name##_initializeDictionary(int newSize);                   \
 void name##_addToDictionary(name##_dictionary* dict, key newKey, value newValue);\
 name##_dictResult name##_searchBasedOnKey(name##_dictionary* dict, key newKey, int (*cmp)(const key *, const key *));\
 name##_dictResult name##_searchBasedOnValue(name##_dictionary* dict, value newValue, int (*cmp)(const value *, const value *));\
+void name##_iterateOverDict(name##_dictionary* dic, void (*callback)(key *, value *));\
 void name##_destroyDictionary(name##_dictionary* dict);

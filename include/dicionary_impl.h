@@ -25,7 +25,7 @@ void name##_addToDictionary(name##_dictionary* dict, key newKey, value newValue)
                                                             \
 name##_dictResult name##_searchBasedOnKey(name##_dictionary* dict, key newKey, int (*cmp)(const key *, const key *))\
 {                                                           \
-    int index = -1;                                       \
+    int index = -1;                                         \
     for(int i = 0; i < dict->keys->size; i++)               \
     {                                                       \
         if(cmp(&newKey, &dict->keys->data[i]) == 1)         \
@@ -36,7 +36,7 @@ name##_dictResult name##_searchBasedOnKey(name##_dictionary* dict, key newKey, i
                                                             \
     name##_dictResult result = { 0 };                       \
                                                             \
-    if(index == -1)                                       \
+    if(index == -1)                                         \
     {                                                       \
         result.success = 0;                                 \
     }                                                       \
@@ -51,7 +51,7 @@ name##_dictResult name##_searchBasedOnKey(name##_dictionary* dict, key newKey, i
                                                             \
 name##_dictResult name##_searchBasedOnValue(name##_dictionary* dict, value newValue, int (*cmp)(const value *, const value *))\
 {                                                           \
-    int index = -1;                                       \
+    int index = -1;                                         \
     for(int i = 0; i < dict->values->size; i++)             \
     {                                                       \
         if(cmp(&newValue, &dict->values->data[i]) == 1)     \
@@ -62,7 +62,7 @@ name##_dictResult name##_searchBasedOnValue(name##_dictionary* dict, value newVa
                                                             \
     name##_dictResult result = { 0 };                       \
                                                             \
-    if(index == -1)                                       \
+    if(index == -1)                                         \
     {                                                       \
         result.success = 0;                                 \
     }                                                       \
@@ -73,6 +73,17 @@ name##_dictResult name##_searchBasedOnValue(name##_dictionary* dict, value newVa
         result.theValue = dict->values->data[index];        \
     }                                                       \
     return result;                                          \
+}                                                           \
+                                                            \
+void name##_iterateOverDict(name##_dictionary* dic, void (*callback)(key *, value *))\
+{                                                           \
+    int length = dic->keys->size;                           \
+    name##_keyList_list* keys = dic->keys;                  \
+    name##_valueList_list* values = dic->values;            \
+    for(int i = 0; i < length; i++)                         \
+    {                                                       \
+        callback(&keys->data[i], &values->data[i]);         \
+    }                                                       \
 }                                                           \
                                                             \
 void name##_destroyDictionary(name##_dictionary* dict)      \

@@ -2,19 +2,56 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "graph.h"
+#include <stdarg.h>
 
-#define DEFINE_TREE(name, type)     \
-DEFINE_GRAPH(name, type);           \
-typedef struct name##_tree name##_tree;\
-typedef struct name##_tree          \
-{                                   \
-    name##_node* root;              \
-    int amount;                     \
-};                                  \
-                                    \
-name##_tree* name##_initializeTree(type newData);\
-void name##_destroyTree(name##_tree* t);\
-void name##_addToTree(name##_node* n, int* setOfMoves, int length, int depth, type newData);\
-void name##_changeValueInTree(name##_node* n, int* setOfMoves, int length, int depth, type newData);\
-void name##_removeFromTree(name##_node* n, int* setOfMoves, int length, int depth, type newData);
+//this tree is specifically for ASTs 
+
+typedef enum varType varType;
+typedef enum varType
+{
+    INTEGER,
+    CHAR,
+    DOUBLE,
+    FLOAT,
+    UNUSED,
+    NOTHING,
+    END, // this is specifically used as a sentinal value when working with the "addingNodes" function
+    POINTER //anything but one of the top 7
+};
+
+typedef void (*DeallocateFunction)(void *);
+typedef void (*FolderFunc)(void *);
+
+typedef struct treeNode treeNode;
+typedef struct treeNode          
+{                                   
+    int index;                      
+    char* identifier;
+    DeallocateFunction f;
+    FolderFunc fold;
+    varType type;    
+    union 
+    {
+        int a;
+        char b;
+        double c;
+        float d;
+        void* e;
+    };
+    int listLength;
+    treeNode** childNodes;    
+};
+
+typedef struct tree tree;
+typedef struct tree          
+{                
+    treeNode* root;                     
+};                                  
+                                    
+tree* initializeTree();
+treeNode* initializeNode(char* id);
+void destroyTree(tree* t);
+void addSingleNode(treeNode* root, treeNode* newLeaf);
+void addMoreNodes(treeNode* root, int count, ...);
+void changeValueInTree(treeNode* node, varType v, ...);
+void folderFunction(tree* t);
