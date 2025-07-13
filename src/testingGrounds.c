@@ -1,5 +1,8 @@
 #include "testingGrounds.h"
 
+#include "binary_tree_impl.h"
+
+DEFINE_BINARY_TREE(test, int);
 
 void printNum(int inputKey);
 int compFunc(int a, int b);

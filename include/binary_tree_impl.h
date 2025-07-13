@@ -4,73 +4,6 @@
 #include <stdlib.h>
 #include "graph_impl.h"
 
-returnStruct turnIntoBinary(int num)
-{
-    int* result = (int *)calloc(16, sizeof(int) * 16);
-
-    unsigned int input = (unsigned int)num;
-    int loc = 0;
-
-    returnStruct s = { 0 };
-
-    while(input != 0)
-    {
-        result[loc] = input & 1;
-        input = input >> 1;
-        loc++;
-    }
-
-    s.list = result;
-    s.length = loc;
-
-    return s;
-}
-
-int determineNextPos(int* arr1, int* arr2)
-{
-    //array 1 is current location
-    //array 2 is where to go
-    int index1 = 15;
-
-    while(arr1[index1] == 0)
-    {
-        index1--;
-    }
-    
-    return arr2[index1];
-}
-
-int isItPossible(int* arr1, int* arr2)
-{
-    int index1 = 15;
-
-    while(arr1[index1] == 0) //arr 1 is loc
-    {
-        index1--;
-    }
-
-    int index2 = 15;
-
-    while(arr2[index2] == 0) //arr 2 is where to go
-    {
-        index2--;
-    }
-
-    int success = 1;
-
-    while(index1 >= 0)
-    {
-        if(arr1[index1] != arr2[index2])
-        {
-            success = 0;
-        }
-        index1--;
-        index2--;
-    }
-
-    return success;
-}
-
 //navigating using binary representations must be redone
 //as the navigation does not currently work
 
@@ -78,7 +11,7 @@ int isItPossible(int* arr1, int* arr2)
 DEFINE_GRAPH(name, type);               \
                                         \
 name##_BT* name##_initializeBT(type initialValue, name##_compFunc f)\
-{                                       \
+{/*When you have input a and b into f, that is f(a,b), if a < b then f returns 1*/\
     name##_BT* bt = malloc(sizeof(name##_BT));\
     bt->f = f;                          \
     bt->root = malloc(sizeof(name##_node));\
@@ -88,36 +21,39 @@ name##_BT* name##_initializeBT(type initialValue, name##_compFunc f)\
     bt->root->nodes = malloc(sizeof(name##_node *) * 2);\
     bt->root->nodes[0] = NULL;          \
     bt->root->nodes[1] = NULL;          \
+    bt->count = 0;                      \
     return bt;                          \
 }                                       \
                                         \
-static inline void name##_BTRemove1(name##_BT* bt, type value)\
+static inline void name##_BTAdd(name##_BT* bt, type value)\
+{                                       \
+    name##_addToBT(bt->f, bt->root, value);\
+    bt->count++;                        \
+    if(bt->count > 9)                   \
+        name##_ReorganizeBT(bt);        \
+}                                       \
+                                        \
+static inline void name##_BTRemove(name##_BT* bt, type value)\
 {                                       \
     name##_BTRemoveByValue(bt->f, bt->root, value);\
+    bt->count++;                        \
+    if(bt->count > 9)                   \
+        name##_ReorganizeBT(bt);        \
 }                                       \
                                         \
-static inline void name##_BTRemove2(name##_BT* bt, int index)\
+static inline int name##_BTContains(name##_BT* bt, type value)\
 {                                       \
-    returnStruct name##_s = turnIntoBinary(index);\
-    name##_BTRemoveByIndex(bt->f, bt->root, 0, name##_s.list, name##_s.length);\
+    bt->count++;                        \
+    if(bt->count > 9)                   \
+        name##_ReorganizeBT(bt);        \
+    return name##_BTContainsfunc(bt->f, bt->root, value);\
 }                                       \
                                         \
-static inline int name##_BTContains1(name##_BT* bt, type value)\
-{                                       \
-    return name##_BTContains(bt->f, bt->root, value);\
-}                                       \
-                                        \
-static inline name##_GraphResult name##_BTRetrieve1(name##_BT* bt, int index)\
-{                                       \
-    returnStruct name##_s = turnIntoBinary(index);\
-    return name##_BTRetrieve(bt->f, bt->root, 0, name##_s.list, name##_s.length);\
-}                                       \
-                                        \
-static inline void name##_CombineBT1(name##_BT* bt1, name##_BT* bt2)\
+static inline void name##_CombineBT(name##_BT* bt1, name##_BT* bt2)\
 {                                       \
     name##_BTCombine(bt1->f, bt1->root, bt2->root);\
     name##_ReorganizeBT(bt1);           \
-    name##_destroyBT(bt2);              \
+    free(bt2);                          \
 }                                       \
                                         \
 void name##_destroyBT(name##_BT* bt)    \
@@ -126,177 +62,136 @@ void name##_destroyBT(name##_BT* bt)    \
     free(bt);                           \
 }                                       \
                                         \
+name##_node* name##_createNewNode(type value)\
+{                                       \
+    name##_node* node = malloc(sizeof(name##_node));\
+    node->data = value;                 \
+    node->length = 2;                   \
+    node->nodes = malloc(sizeof(name##_node *) * 2);\
+    node->nodes[0] = NULL;              \
+    node->nodes[1] = NULL;              \
+    return node;                        \
+}                                       \
+                                        \
 void name##_addToBT(name##_compFunc f, name##_node* current, type value)\
 {                                       \
-    if(current->length != 2)            \
-        return;                         \
-                                        \
-    name##_node* left = current->nodes[0];\
-    name##_node* right = current->nodes[1];\
-    int result = f(current->data, value);\
+    int result = f(value, current->data);\
     if(result == 1)                     \
     {                                   \
-        if(left == NULL)                \
+        if(current->nodes[0] == NULL)   \
         {                               \
-            left = malloc(sizeof(name##_node));\
-            left->length = 2;           \
-            left->data = value;         \
-            left->nodes = malloc(sizeof(name##_node *) * 2);\
-            left->nodes[0] = NULL;      \
-            left->nodes[1] = NULL;      \
-            return;                     \
+            current->nodes[0] = name##_createNewNode(value);\
         }                               \
         else                            \
         {                               \
-            name##_addToBT(f, left, value);\
+            name##_addToBT(f, current->nodes[0], value);\
         }                               \
     }                                   \
     else                                \
     {                                   \
-        if(right == NULL)               \
+        if(current->nodes[1] == NULL)   \
         {                               \
-            right = malloc(sizeof(name##_node));\
-            right->length = 2;           \
-            right->data = value;         \
-            right->nodes = malloc(sizeof(name##_node *) * 2);\
-            right->nodes[0] = NULL;      \
-            right->nodes[1] = NULL;      \
-            return;                     \
+            current->nodes[1] = name##_createNewNode(value);\
         }                               \
         else                            \
         {                               \
-            name##_addToBT(f, right, value);\
+            name##_addToBT(f, current->nodes[1], value);\
         }                               \
     }                                   \
-    return;                             \
 }                                       \
                                         \
-void name##_BTRemoveByIndex(name##_compFunc f, name##_node* current, int depth, int* moves, int length)\
-{                                       \
-    if(depth == length - 1)              \
-    {                                   \
-        name##_node* previous = current->nodes[moves[depth]];\
-        name##_node* nodeToBeRemoved = current->nodes[moves[depth+1]];\
-        name##_node* left = nodeToBeRemoved->nodes[0];\
-        name##_node* right = nodeToBeRemoved->nodes[1];\
-        previous->nodes[moves[depth]] = left;\
-        name##_BTCombine(f, previous, right);\
-        free(nodeToBeRemoved->nodes);   \
-        free(nodeToBeRemoved);          \
-        free(moves);                    \
-    }                                   \
-    else                                \
-    {                                   \
-        name##_BTRemoveByIndex(f, current->nodes[moves[depth]], depth+1, moves, length);\
-    }                                   \
-    return;                             \
-}                                       \
                                         \
 void name##_BTRemoveByValue(name##_compFunc f, name##_node* current, type value)\
 {                                       \
-    int result0 = f(current->data, value);\
-    int result1 = f(current->nodes[0]->data, value);\
-    int result2 = f(current->nodes[1]->data, value);\
-                                        \
-    name##_node* nodeToBeRemoved = NULL;\
-                                        \
-    if(result1 == 2)                    \
+    int result = f(value, current->data);\
+    if(result == 2)                     \
     {                                   \
-        nodeToBeRemoved = current->nodes[0];\
-    }                                   \
+        name##_node* leftNode = current->nodes[0];\
+        name##_node* rightNode = current->nodes[1];\
                                         \
-    if(result2 == 2)                    \
-    {                                   \
-        nodeToBeRemoved = current->nodes[1];\
-    }                                   \
-                                        \
-    if(nodeToBeRemoved != NULL)         \
-    {                                   \
-        name##_node* left = nodeToBeRemoved->nodes[0];\
-        name##_node* right = nodeToBeRemoved->nodes[1];\
-        if(result1 == 2)                \
+        if(rightNode == NULL)           \
         {                               \
-            current->nodes[0] = left;   \
-            name##_BTCombine(f, current, right);\
+            current->data = leftNode->data;\
+            current->nodes[0] = leftNode->nodes[0];\
+            current->nodes[1] = leftNode->nodes[1];\
+            free(leftNode->nodes);      \
+            free(leftNode);             \
+            return;                     \
         }                               \
         else                            \
         {                               \
-            current->nodes[1] = right;  \
-            name##_BTCombine(f, current, left);\
+            name##_node* rightleftNode = rightNode->nodes[0];\
+            name##_node* rightrightNode = rightNode->nodes[1];\
+                                        \
+            current->data = rightNode->data;\
+            current->nodes[0] = rightleftNode;\
+            current->nodes[1] = rightrightNode;\
+                                        \
+            free(rightNode->nodes);     \
+            free(rightNode);            \
+            return;                     \
         }                               \
-        free(nodeToBeRemoved->nodes);   \
-        free(nodeToBeRemoved);          \
+    }                                   \
+    else if(result == 1)                \
+    {                                   \
+        if(current->nodes[0] == NULL)   \
+        {                               \
+            return;                     \
+        }                               \
+        else                            \
+        {                               \
+            name##_BTRemoveByValue(f, current->nodes[0], value);\
+        }                               \
     }                                   \
     else                                \
     {                                   \
-        if(result0 == 1)                    \
-        {                                   \
-            name##_BTRemoveByValue(f, current->nodes[0], value);\
-        }                                   \
-        else                                \
-        {                                   \
+        if(current->nodes[1] == NULL)   \
+        {                               \
+            return;                     \
+        }                               \
+        else                            \
+        {                               \
             name##_BTRemoveByValue(f, current->nodes[1], value);\
-        }                                   \
+        }                               \
     }                                   \
-                                        \
-    return;                             \
 }                                       \
                                         \
-int name##_BTContains(name##_compFunc f, name##_node* current, type value)\
-{                                       \
-    int result = f(current->data, value);\
+int name##_BTContainsfunc(name##_compFunc f, name##_node* current, type value)\
+{/*if current->data == value, the f(value, current->data) returns 2*/\
+    int result = f(value, current->data);\
     if(result == 2)                     \
     {                                   \
         return 1;                       \
     }                                   \
-    if(current->nodes[0] == NULL && current->nodes[1] == NULL)\
+    else if(result == 1)                \
     {                                   \
-        return 0;                       \
-    }                                   \
-    if(current->nodes[0] == NULL)       \
-    {                                   \
-        return name##_BTContains(f, current->nodes[1], value);\
-    }                                   \
-    else if(current->nodes[1] == NULL)  \
-    {                                   \
-        return name##_BTContains(f, current->nodes[0], value);\
-    }                                   \
-    else                                \
-    {                                   \
-        if(result == 1)                 \
+        if(current->nodes[0] == NULL)   \
         {                               \
-            return name##_BTContains(f, current->nodes[0], value);\
+            return 0;                   \
         }                               \
         else                            \
         {                               \
-            return name##_BTContains(f, current->nodes[1], value);\
+            return name##_BTContainsfunc(f, current->nodes[0], value);\
         }                               \
     }                                   \
-}                                       \
-                                        \
-name##_GraphResult name##_BTRetrieve(name##_compFunc f, name##_node* current, int depth, int* moves, int length)\
-{                                       \
-                                        \
-    if(depth == length)                 \
+    else                                \
     {                                   \
-        name##_GraphResult r = { 0 };   \
-        r.success = 1;                  \
-        r.value = current->data;        \
-        return r;                       \
+        if(current->nodes[1] == NULL)   \
+        {                               \
+            return 0;                   \
+        }                               \
+        else                            \
+        {                               \
+            return name##_BTContainsfunc(f, current->nodes[1], value);\
+        }                               \
     }                                   \
-    if(current->nodes[moves[depth]] == NULL)\
-    {                                   \
-        name##_GraphResult s = { 0 };   \
-        s.success = 0;                  \
-        return s;                       \
-    }                                   \
-    return name##_BTRetrieve(f, current->nodes[moves[depth]], depth+1, moves, length);\
+    return 0;                           \
 }                                       \
                                         \
 void name##_BTCombine(name##_compFunc f, name##_node* origin, name##_node* BTToBeAdded)\
 {                                       \
-    int result0 = f(origin->data, BTToBeAdded->data);\
-    if(result0 == 1)                    \
+    int result = f(BTToBeAdded->data, origin->data);\
+    if(result == 1)                     \
     {                                   \
         if(origin->nodes[0] == NULL)    \
         {                               \
