@@ -25,6 +25,7 @@
         "dictionary.h": "c",
         "stdio.h": "c",
         "graph.h": "c",
-        "random": "c"
+        "random": "c",
+        "heap_impl.h": "c"
     }
 }

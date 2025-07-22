@@ -1,5 +1,5 @@
 #pragma once
 
-#include "binary_tree.h"
+#include "heap.h"
 
-DEFINE_BINARY_TREE(test, int);
+DEFINE_HEAP(test, int);

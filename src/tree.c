@@ -120,6 +120,8 @@ void addMoreNodes(treeNode* root, int count, ...)
     {
         list[i] = va_arg(l, treeNode*);
     }
+
+    va_end(l);
 }
 
 void folderFunction(tree* t)
