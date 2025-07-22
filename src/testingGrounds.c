@@ -1,8 +1,5 @@
 #include "testingGrounds.h"
 
-#include "heap_impl.h"
-
-DEFINE_HEAP(test, int);
 
 void printNum(int inputKey);
 int compFunc(int a, int b);
